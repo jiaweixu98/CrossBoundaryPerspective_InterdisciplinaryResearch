@@ -16,5 +16,17 @@ D指标：我认为小团队更“自由”，在进行一种比较“新”的�
 
 SCIE, SSCI, AHCI
 
+SCIE & SSCI: 7类 'SUBSTANCE ABUSE', 'HISTORY & PHILOSOPHY OF SCIENCE', 'PUBLIC, ENVIRONMENTAL & OCCUPATIONAL HEALTH', 'NURSING', 'REHABILITATION', 'PSYCHIATRY', 'GREEN & SUSTAINABLE SCIENCE & TECHNOLOGY'
+
+SSCI & AHCI: 3类 'HISTORY', 'CULTURAL STUDIES', 'HISTORY & PHILOSOPHY OF SCIENCE'
+
+SSCI & SCIE: 1类 HISTORY & PHILOSOPHY OF SCIENCE
+
+结论: JCR的不同索引下(例如SCIE, SSCI, AHCI), 其category是几乎等同的. 即 对于某一category(例如 HISTORY & PHILOSOPHY OF SCIENCE, 几乎所有被归到这一类的期刊,也同时被归属到SCIE, SSCI, AHCI三个索引中)
+
+
+
 MAG data
 参考MAG官方说明：Microsoft Academic Graph: When experts are not enough, 深入理解这个我们极为常用的数据，也是本文的重要数据。
+
+MAG openalex版本的,里面的Genre是啥意思?
