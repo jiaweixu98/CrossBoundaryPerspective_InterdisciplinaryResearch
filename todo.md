@@ -1,5 +1,6 @@
 MAG中有大小journal共十余万个：124064。有一些非常脏，所以我们去看，jcr中的期刊有多少可以在MAG中找到。
 
+
 JCR 2023 report:
 我们匹配到JCR的数据，共匹配到13762本期刊，共14980本（91.8%）。可能MAG数据不全？有一些jcr期刊没有收录（可能是时间原因）。
 
@@ -15,5 +16,5 @@ D指标：我认为小团队更“自由”，在进行一种比较“新”的�
 
 SCIE, SSCI, AHCI
 
-MAG data:
+MAG data
 参考MAG官方说明：Microsoft Academic Graph: When experts are not enough, 深入理解这个我们极为常用的数据，也是本文的重要数据。
