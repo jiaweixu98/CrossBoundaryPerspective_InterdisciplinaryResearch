@@ -34,6 +34,9 @@ Rank1authornumPubYearsFreq = Counter()
 RankLasTauthornumPubYearsFreq = Counter()
 # 第一作者或末位作者的情况
 RankIMportantAuthornumPubYearsFreq = Counter()
+# 非第一作者或末位作者的情况
+RankNotIMportantAuthornumPubYearsFreq = Counter()
+
 
 # n = 100
 with jsonlines.open('../../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/authorSeq.jsonl', mode='r') as reader:
@@ -46,6 +49,7 @@ with jsonlines.open('../../../DataCrossBoundaryPerspective_InterdisciplinaryRese
             Rank1authornumPubYearsFreq[AuthorCount(YearPublist,'rank1')] += 1
             RankLasTauthornumPubYearsFreq[AuthorCount(YearPublist,'rankLast')] += 1
             RankIMportantAuthornumPubYearsFreq[AuthorCount(YearPublist,'both')] += 1
+            RankNotIMportantAuthornumPubYearsFreq[AuthorCount(YearPublist,'others')] += 1
 
 # print(authornumPubYearsFreq)
 # print(Rank1authornumPubYearsFreq)
@@ -56,3 +60,5 @@ pk.dump(authornumPubYearsFreq, open('../../../DataCrossBoundaryPerspective_Inter
 pk.dump(Rank1authornumPubYearsFreq, open('../../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/Rank1authornumPubYearsFreq.pk', 'wb'))
 pk.dump(RankLasTauthornumPubYearsFreq, open('../../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/RankLasTauthornumPubYearsFreq.pk', 'wb'))
 pk.dump(RankIMportantAuthornumPubYearsFreq, open('../../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/RankIMportantAuthornumPubYearsFreq.pk', 'wb'))
+pk.dump(RankNotIMportantAuthornumPubYearsFreq, open('../../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/RankNotIMportantAuthornumPubYearsFreq.pk', 'wb'))
+
