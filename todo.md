@@ -29,4 +29,4 @@ SSCI & SCIE: 1类 HISTORY & PHILOSOPHY OF SCIENCE
 MAG data
 参考MAG官方说明：Microsoft Academic Graph: When experts are not enough, 深入理解这个我们极为常用的数据，也是本文的重要数据。
 
-MAG openalex版本的,里面的Genre是啥意思?
+Bootstrap不一定非得用，从较小的样本推总体的时候有用，如果已经是超大的样本，bootstrap的意义似乎不是很大。（主要是特别慢）
