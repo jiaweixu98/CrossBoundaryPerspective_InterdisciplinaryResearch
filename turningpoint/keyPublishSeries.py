@@ -94,62 +94,25 @@ mag2journal = pk.load(open('../../DataCrossBoundaryPerspective_Interdisciplinary
 
 # ##############################################################################################################
 
-# # 累计主要参与者JCR学科
-# def cumKeyJFieldNum(publist):
-#     # yearPublist  {2023:{'rank1':set(), 'rankLast':set(), 'others':set() }, ...}
-#     series = {}
-#     yearid = 1
-#     publishedJournalFieldSet = set()
-#     for _, yearpublist in publist.items():
-#         # 是第一作者或末位作者
-#         if len(yearpublist['rank1']) > 0 or len(yearpublist['rankLast']) > 0:
-#             for rank1paper in yearpublist['rank1']:
-#                 for field in mag2journal[paper2journalid[rank1paper]]['FieldList']:
-#                     publishedJournalFieldSet.add(field)
-#             for rankLastpaper in yearpublist['rankLast']:
-#                 for field in mag2journal[paper2journalid[rankLastpaper]]['FieldList']:
-#                     publishedJournalFieldSet.add(field)
-#             series[yearid] = len(publishedJournalFieldSet)
-#             yearid += 1
-#     return series
-
-# # 累计一作JCR学科
-# def cumFirstJFieldNum(publist):
-#     # yearPublist  {2023:{'rank1':set(), 'rankLast':set(), 'others':set() }, ...}
-#     series = {}
-#     yearid = 1
-#     publishedJournalFieldSet = set()
-#     for _, yearpublist in publist.items():
-#         # 是第一作者
-#         if len(yearpublist['rank1']) > 0:
-#             for rank1paper in yearpublist['rank1']:
-#                 for field in mag2journal[paper2journalid[rank1paper]]['FieldList']:
-#                     publishedJournalFieldSet.add(field)
-#             series[yearid] = len(publishedJournalFieldSet)
-#             yearid += 1
-#     return series
-
-# # 累计末位作者JCR学科
-# def cumLastJFieldNum(publist):
-#     # yearPublist  {2023:{'rank1':set(), 'rankLast':set(), 'others':set() }, ...}
-#     series = {}
-#     yearid = 1
-#     publishedJournalFieldSet = set()
-#     for _, yearpublist in publist.items():
-#         # 是末位作者
-#         if len(yearpublist['rankLast']) > 0:
-#             for rankLastpaper in yearpublist['rankLast']:
-#                 for field in mag2journal[paper2journalid[rankLastpaper]]['FieldList']:
-#                     publishedJournalFieldSet.add(field)
-#             series[yearid] = len(publishedJournalFieldSet)
-#             yearid += 1
-#     return series
+# 主要负责文献：开始年份
+def keyStartYearpublist(publist):
+    # yearPublist  {2023:{'rank1':set(), 'rankLast':set(), 'others':set() }, ...}
+    for year, yearpublist in publist.items():
+        if len(yearpublist['rank1']) > 0 or len(yearpublist['rankLast']) > 0:
+            return int(year)
+# 主要负责文献：休止年份
+def keyEndYearpublist(publist):
+    for year, yearpublist in sorted(publist.items(), reverse=True):
+        if len(yearpublist['rank1']) > 0 or len(yearpublist['rankLast']) > 0:
+            return int(year)
+# 主要负责文献：年份跨度
+def keySpanYearpublist(publist):
+    return keyEndYearpublist(publist) - keyStartYearpublist(publist)
 
 
-##############################################################################################################
 
-# 累计主要参与者CI学科
-def cumKeyJCINum(publist):
+# 累计主要参与者JCR学科(控制年份, 控制职业生涯长度)
+def cumKeyJFieldNum(publist):
     # yearPublist  {2023:{'rank1':set(), 'rankLast':set(), 'others':set() }, ...}
     series = {}
     yearid = 1
@@ -158,17 +121,17 @@ def cumKeyJCINum(publist):
         # 是第一作者或末位作者
         if len(yearpublist['rank1']) > 0 or len(yearpublist['rankLast']) > 0:
             for rank1paper in yearpublist['rank1']:
-                for field in mag2journal[paper2journalid[rank1paper]]['CitationIndexList']:
+                for field in mag2journal[paper2journalid[rank1paper]]['FieldList']:
                     publishedJournalFieldSet.add(field)
             for rankLastpaper in yearpublist['rankLast']:
-                for field in mag2journal[paper2journalid[rankLastpaper]]['CitationIndexList']:
+                for field in mag2journal[paper2journalid[rankLastpaper]]['FieldList']:
                     publishedJournalFieldSet.add(field)
             series[yearid] = len(publishedJournalFieldSet)
             yearid += 1
     return series
 
 # 累计一作JCR学科
-def cumFirstJCINum(publist):
+def cumFirstJFieldNum(publist):
     # yearPublist  {2023:{'rank1':set(), 'rankLast':set(), 'others':set() }, ...}
     series = {}
     yearid = 1
@@ -177,14 +140,14 @@ def cumFirstJCINum(publist):
         # 是第一作者
         if len(yearpublist['rank1']) > 0:
             for rank1paper in yearpublist['rank1']:
-                for field in mag2journal[paper2journalid[rank1paper]]['CitationIndexList']:
+                for field in mag2journal[paper2journalid[rank1paper]]['FieldList']:
                     publishedJournalFieldSet.add(field)
             series[yearid] = len(publishedJournalFieldSet)
             yearid += 1
     return series
 
 # 累计末位作者JCR学科
-def cumLastJCINum(publist):
+def cumLastJFieldNum(publist):
     # yearPublist  {2023:{'rank1':set(), 'rankLast':set(), 'others':set() }, ...}
     series = {}
     yearid = 1
@@ -193,11 +156,65 @@ def cumLastJCINum(publist):
         # 是末位作者
         if len(yearpublist['rankLast']) > 0:
             for rankLastpaper in yearpublist['rankLast']:
-                for field in mag2journal[paper2journalid[rankLastpaper]]['CitationIndexList']:
+                for field in mag2journal[paper2journalid[rankLastpaper]]['FieldList']:
                     publishedJournalFieldSet.add(field)
             series[yearid] = len(publishedJournalFieldSet)
             yearid += 1
     return series
+
+
+##############################################################################################################
+
+# # 累计主要参与者CI学科
+# def cumKeyJCINum(publist):
+#     # yearPublist  {2023:{'rank1':set(), 'rankLast':set(), 'others':set() }, ...}
+#     series = {}
+#     yearid = 1
+#     publishedJournalFieldSet = set()
+#     for _, yearpublist in publist.items():
+#         # 是第一作者或末位作者
+#         if len(yearpublist['rank1']) > 0 or len(yearpublist['rankLast']) > 0:
+#             for rank1paper in yearpublist['rank1']:
+#                 for field in mag2journal[paper2journalid[rank1paper]]['CitationIndexList']:
+#                     publishedJournalFieldSet.add(field)
+#             for rankLastpaper in yearpublist['rankLast']:
+#                 for field in mag2journal[paper2journalid[rankLastpaper]]['CitationIndexList']:
+#                     publishedJournalFieldSet.add(field)
+#             series[yearid] = len(publishedJournalFieldSet)
+#             yearid += 1
+#     return series
+
+# # 累计一作JCR学科
+# def cumFirstJCINum(publist):
+#     # yearPublist  {2023:{'rank1':set(), 'rankLast':set(), 'others':set() }, ...}
+#     series = {}
+#     yearid = 1
+#     publishedJournalFieldSet = set()
+#     for _, yearpublist in publist.items():
+#         # 是第一作者
+#         if len(yearpublist['rank1']) > 0:
+#             for rank1paper in yearpublist['rank1']:
+#                 for field in mag2journal[paper2journalid[rank1paper]]['CitationIndexList']:
+#                     publishedJournalFieldSet.add(field)
+#             series[yearid] = len(publishedJournalFieldSet)
+#             yearid += 1
+#     return series
+
+# # 累计末位作者JCR学科
+# def cumLastJCINum(publist):
+#     # yearPublist  {2023:{'rank1':set(), 'rankLast':set(), 'others':set() }, ...}
+#     series = {}
+#     yearid = 1
+#     publishedJournalFieldSet = set()
+#     for _, yearpublist in publist.items():
+#         # 是末位作者
+#         if len(yearpublist['rankLast']) > 0:
+#             for rankLastpaper in yearpublist['rankLast']:
+#                 for field in mag2journal[paper2journalid[rankLastpaper]]['CitationIndexList']:
+#                     publishedJournalFieldSet.add(field)
+#             series[yearid] = len(publishedJournalFieldSet)
+#             yearid += 1
+#     return series
 
 
 # KeySeriesCombineDict = {}
@@ -220,21 +237,23 @@ with jsonlines.open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearc
     for lines in tqdm(reader):
         # 看这个字典（其实此循环只有1个元素）
         for authorid, publist in lines.items():
-            for yearid, keyPubNum in cumKeyJCINum(publist).items():
-                if yearid not in KeyFieldSeriesCombineDict:
-                    KeyFieldSeriesCombineDict[yearid] = [keyPubNum]
-                else:
-                    KeyFieldSeriesCombineDict[yearid].append(keyPubNum)
-            for yearid, keyPubNum in cumFirstJCINum(publist).items():
-                if yearid not in FirstFieldSeriesCombineDict:
-                    FirstFieldSeriesCombineDict[yearid] = [keyPubNum]
-                else:
-                    FirstFieldSeriesCombineDict[yearid].append(keyPubNum)
-            for yearid, keyPubNum in cumLastJCINum(publist).items():
-                if yearid not in LastFieldSeriesCombineDict:
-                    LastFieldSeriesCombineDict[yearid] = [keyPubNum]
-                else:
-                    LastFieldSeriesCombineDict[yearid].append(keyPubNum)
+            # 控制主要年份
+            if (1997 < keyStartYearpublist(publist) < 2003) and ( 7< keySpanYearpublist(publist)< 11  ):
+                for yearid, keyPubNum in cumKeyJFieldNum(publist).items():
+                    if yearid not in KeyFieldSeriesCombineDict:
+                        KeyFieldSeriesCombineDict[yearid] = [keyPubNum]
+                    else:
+                        KeyFieldSeriesCombineDict[yearid].append(keyPubNum)
+                for yearid, keyPubNum in cumFirstJFieldNum(publist).items():
+                    if yearid not in FirstFieldSeriesCombineDict:
+                        FirstFieldSeriesCombineDict[yearid] = [keyPubNum]
+                    else:
+                        FirstFieldSeriesCombineDict[yearid].append(keyPubNum)
+                for yearid, keyPubNum in cumLastJFieldNum(publist).items():
+                    if yearid not in LastFieldSeriesCombineDict:
+                        LastFieldSeriesCombineDict[yearid] = [keyPubNum]
+                    else:
+                        LastFieldSeriesCombineDict[yearid].append(keyPubNum)
 
 KeyJFieldSeriesAVGdict = {}
 FirstJFieldSeriesAVGdict = {}
@@ -248,9 +267,9 @@ for k,v in LastFieldSeriesCombineDict.items():
     LastJFieldSeriesAVGdict[k] = sum(v)/len(v)
 
 
-pk.dump(KeyJFieldSeriesAVGdict, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/KeyJCISeriesAVGdict.pk', 'wb'))
-pk.dump(FirstJFieldSeriesAVGdict, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/FirstJCISeriesAVGdict.pk', 'wb'))
-pk.dump(LastJFieldSeriesAVGdict, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/LastJCISeriesAVGdict.pk', 'wb'))
+pk.dump(KeyJFieldSeriesAVGdict, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/KeyJField98_02_8_10SeriesAVGdict.pk', 'wb'))
+pk.dump(FirstJFieldSeriesAVGdict, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/FirstJField98_02_8_10SeriesAVGdict.pk', 'wb'))
+pk.dump(LastJFieldSeriesAVGdict, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/LastJField98_02_8_10SeriesAVGdict.pk', 'wb'))
 
 
 # KeyNumAuthor = {}
