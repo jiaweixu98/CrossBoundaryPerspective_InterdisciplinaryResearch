@@ -163,6 +163,34 @@ def cumLastJFieldNum(publist):
     return series
 
 
+########################################################################
+# 主要参与者JCR学科BreakThrough的时间点
+def KeyBreakthrough(publist):
+    # yearPublist  {2023:{'rank1':set(), 'rankLast':set(), 'others':set() }, ...}
+    series = {}
+    yearid = 1
+    publishedJournalFieldSet = set()
+    for _, yearpublist in publist.items():
+        # 是第一作者或末位作者
+        if len(yearpublist['rank1']) > 0 or len(yearpublist['rankLast']) > 0:
+            for rank1paper in yearpublist['rank1']:
+                for field in mag2journal[paper2journalid[rank1paper]]['FieldList']:
+                    publishedJournalFieldSet.add(field)
+            for rankLastpaper in yearpublist['rankLast']:
+                for field in mag2journal[paper2journalid[rankLastpaper]]['FieldList']:
+                    publishedJournalFieldSet.add(field)
+            series[yearid] = len(publishedJournalFieldSet)
+            yearid += 1
+    return series
+
+
+
+
+
+
+
+
+
 ##############################################################################################################
 
 # # 累计主要参与者CI学科
@@ -215,6 +243,12 @@ def cumLastJFieldNum(publist):
 #             series[yearid] = len(publishedJournalFieldSet)
 #             yearid += 1
 #     return series
+
+
+
+
+
+
 
 
 # KeySeriesCombineDict = {}
