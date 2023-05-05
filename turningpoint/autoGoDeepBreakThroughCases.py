@@ -328,67 +328,67 @@ for cutyearCount in range(2,CUT_YEAR_COUNT,1):
     print('cutyearCount:',cutyearCount)
     try:
         print('KeyBreakthroughCombineCounter:',len(KeyBreakthroughCombineCounter))
-        for i in range(20):
+        for i in range(100):
             print(sorted(KeyBreakthroughCombineCounter.items(),key=lambda x:-x[1])[i])
     except:
         pass
-        print('======')
+        print('======\n')
     try:
         print('KeyInitialSetCounter:',len(KeyInitialSetCounter))
-        for i in range(20):
+        for i in range(100):
             print(sorted(KeyInitialSetCounter.items(),key=lambda x:-x[1])[i])
     except:
         pass
-        print('======')
+        print('======\n')
     try:
         print('KeyNoBreakthroughCounter:',len(KeyNoBreakthroughCounter))
-        for i in range(20):
+        for i in range(100):
             print(sorted(KeyNoBreakthroughCounter.items(),key=lambda x:-x[1])[i])
     except:
         pass
-        print('======')
+        print('======\n\n\n\n')
     try:
         print('FirstBreakthroughCombineCounter:',len(FirstBreakthroughCombineCounter))
-        for i in range(20):
+        for i in range(100):
             print(sorted(FirstBreakthroughCombineCounter.items(),key=lambda x:-x[1])[i])
     except:
         pass
-        print('======')
+        print('======\n')
     try:
         print('FirstInitialSetCounter:',len(FirstInitialSetCounter))
-        for i in range(20):
+        for i in range(100):
             print(sorted(FirstInitialSetCounter.items(),key=lambda x:-x[1])[i])
     except:
         pass
-        print('======')
+        print('======\n')
     try:
         print('FirstNoBreakthroughCounter:',len(FirstNoBreakthroughCounter))
-        for i in range(20):
+        for i in range(100):
             print(sorted(FirstNoBreakthroughCounter.items(),key=lambda x:-x[1])[i])
     except:
         pass
-        print('======')
+        print('======\n\n\n\n')
     try:
         print('LastBreakthroughCombineCounter:',len(LastBreakthroughCombineCounter))
-        for i in range(20):
+        for i in range(100):
             print(sorted(LastBreakthroughCombineCounter.items(),key=lambda x:-x[1])[i])
     except:
         pass
-        print('======')
+        print('======\n')
     try:
         print('LastInitialSetCounter:',len(LastInitialSetCounter))
-        for i in range(20):
+        for i in range(100):
             print(sorted(LastInitialSetCounter.items(),key=lambda x:-x[1])[i])
     except:
         pass
-        print('======')
+        print('======\n')
     try:
         print('LastNoBreakthroughCounter:',len(LastNoBreakthroughCounter))
-        for i in range(20):
+        for i in range(100):
             print(sorted(LastNoBreakthroughCounter.items(),key=lambda x:-x[1])[i])
     except:
         pass
-        print('======')
+        print('======\n\n\n\n')
     
 
     pk.dump(KeyInitialSetCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/KeyInitialSetCounter%d_%d_True%dCut.pk'%(START_YAER,END_YAER,cutyearCount), 'wb'))
