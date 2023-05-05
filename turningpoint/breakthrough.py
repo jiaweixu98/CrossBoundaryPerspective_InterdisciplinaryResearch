@@ -10,19 +10,56 @@ nonBreakthroughJournal = {'MULTIDISCIPLINARY SCIENCES','SOCIAL SCIENCES, INTERDI
 # ##############################################################################################################
 
 # 主要负责文献：开始年份
-def keyStartYearpublist(publist):
+def StartYearpublist(publist, Typestr='both'):
     # yearPublist  {2023:{'rank1':set(), 'rankLast':set(), 'others':set() }, ...}
-    for year, yearpublist in publist.items():
-        if len(yearpublist['rank1']) > 0 or len(yearpublist['rankLast']) > 0:
-            return int(year)
+    if Typestr == 'both':
+        for year, yearpublist in publist.items():
+            if len(yearpublist['rank1']) > 0 or len(yearpublist['rankLast']) > 0:
+                return int(year)
+    elif Typestr == 'rank1':
+        for year, yearpublist in publist.items():
+            if len(yearpublist['rank1']) > 0:
+                return int(year)
+    elif Typestr == 'rankLast':
+        for year, yearpublist in publist.items():
+            if len(yearpublist['rankLast']) > 0:
+                return int(year)
 # 主要负责文献：休止年份
-def keyEndYearpublist(publist):
-    for year, yearpublist in sorted(publist.items(), reverse=True):
-        if len(yearpublist['rank1']) > 0 or len(yearpublist['rankLast']) > 0:
-            return int(year)
+def EndYearpublist(publist, Typestr='both'):
+    if Typestr == 'both':
+        for year, yearpublist in sorted(publist.items(), reverse=True):
+            if len(yearpublist['rank1']) > 0 or len(yearpublist['rankLast']) > 0:
+                return int(year)
+    elif Typestr == 'rank1':
+        for year, yearpublist in sorted(publist.items(), reverse=True):
+            if len(yearpublist['rank1']) > 0:
+                return int(year)
+    elif Typestr == 'rankLast':
+        for year, yearpublist in sorted(publist.items(), reverse=True):
+            if len(yearpublist['rankLast']) > 0:
+                return int(year)
 # 主要负责文献：年份跨度
-def keySpanYearpublist(publist):
-    return keyEndYearpublist(publist) - keyStartYearpublist(publist)
+def SpanYearpublist(publist, Typestr='both'):
+    return EndYearpublist(publist,Typestr) - StartYearpublist(publist,Typestr)
+
+# 主要负责文献：真实年份跨度
+def TrueSpanYearpublist(publist, Typestr='both'):
+    # yearPublist  {2023:{'rank1':set(), 'rankLast':set(), 'others':set() }, ...}
+    truthSpan = 0
+    if Typestr == 'both':
+        for _, yearpublist in publist.items():
+            if len(yearpublist['rank1']) > 0 or len(yearpublist['rankLast']) > 0:
+                truthSpan += 1
+    elif Typestr == 'rank1':
+        for _, yearpublist in publist.items():
+            if len(yearpublist['rank1']) > 0:
+                truthSpan += 1
+    elif Typestr == 'rankLast':
+        for _, yearpublist in publist.items():
+            if len(yearpublist['rankLast']) > 0:
+                truthSpan += 1
+    return truthSpan
+
 
 ##################################################################################################################
 # 主要参与者JCR学科BreakThrough的时间点
@@ -63,7 +100,7 @@ def KeyBreakthrough(publist):
                     if flag == 1:
                         return yearid
     # 如果所有的文章都看完了，还没有转向，说明这个人一辈子都没有突破自己第一年的情况；输出-1，即没有转向过。
-    return -1
+    return 0
 
 
 # 第一作者JCR学科BreakThrough的时间点
@@ -94,7 +131,7 @@ def FirstBreakthrough(publist):
                     if flag == 1:
                         return yearid
     # 如果所有的文章都看完了，还没有转向，说明这个人一辈子都没有突破自己第一年的情况；输出-1，即没有转向过。
-    return -1
+    return 0
 
 
 # 末位作者JCR学科BreakThrough的时间点
@@ -121,7 +158,7 @@ def LastBreakthrough(publist):
                     if flag == 1:
                         return yearid
     # 如果所有的文章都看完了，还没有转向，说明这个人一辈子都没有突破自己第一年的情况；输出-1，即没有转向过。
-    return -1
+    return 0
 
 KeyFieldSeriesCombineDict = {}
 FirstFieldSeriesCombineDict = {}
@@ -136,12 +173,15 @@ with jsonlines.open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearc
     for lines in tqdm(reader):
         # 看这个字典（其实此循环只有1个元素）
         for authorid, publist in lines.items():
+            KeyBreakthroughCounter[KeyBreakthrough(publist)] += 1
+            FirstBreakthroughCounter[FirstBreakthrough(publist)] += 1
+            LastBreakthroughCounter[LastBreakthrough(publist)] += 1
             # 控制主要年份，和生涯寿命
-            if (1997 < keyStartYearpublist(publist) < 2003) and ( 8 < keySpanYearpublist(publist)< 10  ):
-                # 统计不同年份转向的人
-                KeyBreakthroughCounter[KeyBreakthrough(publist)] += 1
-                FirstBreakthroughCounter[FirstBreakthrough(publist)] += 1
-                LastBreakthroughCounter[LastBreakthrough(publist)] += 1
+            # if (2000 < keyStartYearpublist(publist) < 2002) and ( 5 < keySpanYearpublist(publist)< 7  ):
+            #     # 统计不同年份转向的人
+            #     KeyBreakthroughCounter[KeyBreakthrough(publist)] += 1
+            #     FirstBreakthroughCounter[FirstBreakthrough(publist)] += 1
+            #     LastBreakthroughCounter[LastBreakthrough(publist)] += 1
             # if (1997 < keyStartYearpublist(publist) < 2003) and ( 8 < keySpanYearpublist(publist)< 10  ):
             #     for yearid, keyPubNum in cumKeyJFieldNum(publist).items():
             #         if yearid not in KeyFieldSeriesCombineDict:
@@ -160,9 +200,9 @@ with jsonlines.open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearc
             #             LastFieldSeriesCombineDict[yearid].append(keyPubNum)
 
 
-pk.dump(KeyBreakthroughCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/KeyBreakthroughCounter98_02_9.pk', 'wb'))
-pk.dump(FirstBreakthroughCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/FirstBreakthroughCounter98_02_9.pk', 'wb'))
-pk.dump(LastBreakthroughCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/LastBreakthroughCounter98_02_9.pk', 'wb'))
+pk.dump(KeyBreakthroughCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/KeyBreakthroughCounterAll3.pk', 'wb'))
+pk.dump(FirstBreakthroughCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/FirstBreakthroughCounterAll3.pk', 'wb'))
+pk.dump(LastBreakthroughCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/LastBreakthroughCounterAll3.pk', 'wb'))
 
 # KeyJFieldSeriesAVGdict = {}
 # FirstJFieldSeriesAVGdict = {}
