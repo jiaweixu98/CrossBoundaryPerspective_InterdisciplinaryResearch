@@ -86,10 +86,12 @@ def Breakthrough(publist, cutYear=100, TypeStr='both'):
                 if len(initialSet) == 0:
                     for rank1paper in yearpublist['rank1']:
                         for field in mag2journal[paper2journalid[rank1paper]]['FieldList']:
-                            initialSet.add(field)
+                            if field not in nonBreakthroughJournal:
+                                initialSet.add(field)
                     for rankLastpaper in yearpublist['rankLast']:
                         for field in mag2journal[paper2journalid[rankLastpaper]]['FieldList']:
-                            initialSet.add(field)
+                            if field not in nonBreakthroughJournal:
+                                initialSet.add(field)
                 # 非处女作之年，看是否符合"转向标准"
                 else:
                     for rank1paper in yearpublist['rank1']:
@@ -123,7 +125,8 @@ def Breakthrough(publist, cutYear=100, TypeStr='both'):
                 if len(initialSet) == 0:
                     for rank1paper in yearpublist['rank1']:
                         for field in mag2journal[paper2journalid[rank1paper]]['FieldList']:
-                            initialSet.add(field)
+                            if field not in nonBreakthroughJournal:
+                                initialSet.add(field)
                 # 非处女作之年，看是否符合"转向标准"
                 else:
                     for rank1paper in yearpublist['rank1']:
@@ -150,7 +153,8 @@ def Breakthrough(publist, cutYear=100, TypeStr='both'):
                 if len(initialSet) == 0:
                     for rankLastpaper in yearpublist['rankLast']:
                         for field in mag2journal[paper2journalid[rankLastpaper]]['FieldList']:
-                            initialSet.add(field)
+                            if field not in nonBreakthroughJournal:
+                                initialSet.add(field)
                 # 非处女作之年，看是否符合"转向标准"
                 else:
                     for rankLastpaper in yearpublist['rankLast']:
@@ -178,10 +182,12 @@ def KeyBreakthrough(publist):
             if len(initialSet) == 0:
                 for rank1paper in yearpublist['rank1']:
                     for field in mag2journal[paper2journalid[rank1paper]]['FieldList']:
-                        initialSet.add(field)
+                        if field not in nonBreakthroughJournal:
+                                initialSet.add(field)
                 for rankLastpaper in yearpublist['rankLast']:
                     for field in mag2journal[paper2journalid[rankLastpaper]]['FieldList']:
-                        initialSet.add(field)
+                        if field not in nonBreakthroughJournal:
+                                initialSet.add(field)
             # 非处女作之年，看是否符合"转向标准"
             else:
                 for rank1paper in yearpublist['rank1']:
@@ -219,7 +225,8 @@ def FirstBreakthrough(publist):
             if len(initialSet) == 0:
                 for rank1paper in yearpublist['rank1']:
                     for field in mag2journal[paper2journalid[rank1paper]]['FieldList']:
-                        initialSet.add(field)
+                        if field not in nonBreakthroughJournal:
+                                initialSet.add(field)
             # 非处女作之年，看是否符合"转向标准"
             else:
                 for rank1paper in yearpublist['rank1']:
@@ -250,7 +257,8 @@ def LastBreakthrough(publist):
             if len(initialSet) == 0:
                 for rankLastpaper in yearpublist['rankLast']:
                     for field in mag2journal[paper2journalid[rankLastpaper]]['FieldList']:
-                        initialSet.add(field)
+                        if field not in nonBreakthroughJournal:
+                                initialSet.add(field)
             # 非处女作之年，看是否符合"转向标准"
             else:
                 for rankLastpaper in yearpublist['rankLast']:

@@ -32,8 +32,8 @@ with jsonlines.open('../../../DataCrossBoundaryPerspective_InterdisciplinaryRese
     with jsonlines.open('../../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/authorSeq.jsonl', mode='r') as reader:
         for lines in tqdm(reader):
             for authorID, YearPublist in lines.items():
-                # 至少有3年以第一作者身份，发论文
-                if AuthorCount(YearPublist,'both') > 2:
+                # 至少有2年以第一作者身份，发论文
+                if AuthorCount(YearPublist,'both') > 1:
                     temp = AuthorPublistTimeRank(YearPublist)
                     if temp == '':
                         continue

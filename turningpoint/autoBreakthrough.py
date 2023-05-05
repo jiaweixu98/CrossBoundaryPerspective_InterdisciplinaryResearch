@@ -7,9 +7,9 @@ import pickle as pk
 #参数设置
 START_YAER = 1998
 END_YAER = 2002
-CUT_YEAR_COUNT = 30
+CUT_YEAR_COUNT = 21
 
-
+print('参数设置: START_YAER: %d, END_YAER: %d, CUT_YEAR_COUNT: %d'%(START_YAER, END_YAER, CUT_YEAR_COUNT))
 
 
 paper2journalid = pk.load(open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/paper2journalid.pk', 'rb'))
@@ -89,10 +89,12 @@ def Breakthrough(publist, cutYear=100, TypeStr='both'):
                 if len(initialSet) == 0:
                     for rank1paper in yearpublist['rank1']:
                         for field in mag2journal[paper2journalid[rank1paper]]['FieldList']:
-                            initialSet.add(field)
+                            if field not in nonBreakthroughJournal:
+                                initialSet.add(field)
                     for rankLastpaper in yearpublist['rankLast']:
                         for field in mag2journal[paper2journalid[rankLastpaper]]['FieldList']:
-                            initialSet.add(field)
+                            if field not in nonBreakthroughJournal:
+                                initialSet.add(field)
                 # 非处女作之年，看是否符合"转向标准"
                 else:
                     for rank1paper in yearpublist['rank1']:
@@ -126,7 +128,8 @@ def Breakthrough(publist, cutYear=100, TypeStr='both'):
                 if len(initialSet) == 0:
                     for rank1paper in yearpublist['rank1']:
                         for field in mag2journal[paper2journalid[rank1paper]]['FieldList']:
-                            initialSet.add(field)
+                            if field not in nonBreakthroughJournal:
+                                initialSet.add(field)
                 # 非处女作之年，看是否符合"转向标准"
                 else:
                     for rank1paper in yearpublist['rank1']:
@@ -153,7 +156,8 @@ def Breakthrough(publist, cutYear=100, TypeStr='both'):
                 if len(initialSet) == 0:
                     for rankLastpaper in yearpublist['rankLast']:
                         for field in mag2journal[paper2journalid[rankLastpaper]]['FieldList']:
-                            initialSet.add(field)
+                            if field not in nonBreakthroughJournal:
+                                initialSet.add(field)
                 # 非处女作之年，看是否符合"转向标准"
                 else:
                     for rankLastpaper in yearpublist['rankLast']:
@@ -167,7 +171,7 @@ def Breakthrough(publist, cutYear=100, TypeStr='both'):
     return 0
 
 #从3开始的原因，3才可以看出转向变化对生涯的影响。
-for cutyearCount in range(3,CUT_YEAR_COUNT,1):
+for cutyearCount in range(2,CUT_YEAR_COUNT,1):
     KeyBreakthroughCounter = Counter()
     FirstBreakthroughCounter = Counter()
     LastBreakthroughCounter = Counter()
