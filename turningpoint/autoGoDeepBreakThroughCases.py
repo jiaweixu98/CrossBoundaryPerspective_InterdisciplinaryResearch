@@ -328,49 +328,49 @@ for cutyearCount in range(2,CUT_YEAR_COUNT,1):
     print('cutyearCount:',cutyearCount)
     try:
         print('KeyBreakthroughCombineCounter:',len(KeyBreakthroughCombineCounter))
-        for i in range(100):
+        for i in range(1000):
             print(sorted(KeyBreakthroughCombineCounter.items(),key=lambda x:-x[1])[i])
     except:
         pass
         print('======\n')
     try:
         print('KeyInitialSetCounter:',len(KeyInitialSetCounter))
-        for i in range(100):
+        for i in range(1000):
             print(sorted(KeyInitialSetCounter.items(),key=lambda x:-x[1])[i])
     except:
         pass
         print('======\n')
     try:
         print('KeyNoBreakthroughCounter:',len(KeyNoBreakthroughCounter))
-        for i in range(100):
+        for i in range(1000):
             print(sorted(KeyNoBreakthroughCounter.items(),key=lambda x:-x[1])[i])
     except:
         pass
         print('======\n\n\n\n')
     try:
         print('FirstBreakthroughCombineCounter:',len(FirstBreakthroughCombineCounter))
-        for i in range(100):
+        for i in range(1000):
             print(sorted(FirstBreakthroughCombineCounter.items(),key=lambda x:-x[1])[i])
     except:
         pass
         print('======\n')
     try:
         print('FirstInitialSetCounter:',len(FirstInitialSetCounter))
-        for i in range(100):
+        for i in range(1000):
             print(sorted(FirstInitialSetCounter.items(),key=lambda x:-x[1])[i])
     except:
         pass
         print('======\n')
     try:
         print('FirstNoBreakthroughCounter:',len(FirstNoBreakthroughCounter))
-        for i in range(100):
+        for i in range(1000):
             print(sorted(FirstNoBreakthroughCounter.items(),key=lambda x:-x[1])[i])
     except:
         pass
         print('======\n\n\n\n')
     try:
         print('LastBreakthroughCombineCounter:',len(LastBreakthroughCombineCounter))
-        for i in range(100):
+        for i in range(1000):
             print(sorted(LastBreakthroughCombineCounter.items(),key=lambda x:-x[1])[i])
     except:
         pass
@@ -384,7 +384,7 @@ for cutyearCount in range(2,CUT_YEAR_COUNT,1):
         print('======\n')
     try:
         print('LastNoBreakthroughCounter:',len(LastNoBreakthroughCounter))
-        for i in range(100):
+        for i in range(1000):
             print(sorted(LastNoBreakthroughCounter.items(),key=lambda x:-x[1])[i])
     except:
         pass
