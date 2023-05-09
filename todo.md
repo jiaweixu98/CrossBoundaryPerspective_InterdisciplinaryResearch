@@ -28,5 +28,8 @@ SSCI & SCIE: 1类 HISTORY & PHILOSOPHY OF SCIENCE
 
 MAG data
 参考MAG官方说明：Microsoft Academic Graph: When experts are not enough, 深入理解这个我们极为常用的数据，也是本文的重要数据。
-
 Bootstrap不一定非得用，从较小的样本推总体的时候有用，如果已经是超大的样本，bootstrap的意义似乎不是很大。（主要是特别慢）
+
+问题：
+KeyInitialSetCounter：空的如何解决？
+很难说，学科间转换的关系。因为一些学科间的转换本身就比较正常。因此我要做粒度更大的划分。
