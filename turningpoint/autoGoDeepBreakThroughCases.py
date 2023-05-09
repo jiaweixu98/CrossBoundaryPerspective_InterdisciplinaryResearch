@@ -176,12 +176,12 @@ def BreakthroughMostFreqCombinations(publist, cutYear=100, TypeStr='both'):
     yearid = 0
     if TypeStr == 'both':
         for _, yearpublist in publist.items():
-            yearid += 1
-            # 如果已经到了cutYear了，直接结束循环（到此，强行结束该研究者的职业生涯）。
-            if yearid > cutYear:
-                break
-            # 是第一作者或末位作者
             if len(yearpublist['rank1']) > 0 or len(yearpublist['rankLast']) > 0:
+            # 是第一作者或末位作者，才算一个时点
+                yearid += 1
+                # 如果已经到了cutYear了，直接结束循环（到此，强行结束该研究者的职业生涯）。
+                if yearid > cutYear:
+                    break
                 # 处女作之年，要初始化
                 if len(initialSet) == 0:
                     for rank1paper in yearpublist['rank1']:
@@ -215,12 +215,12 @@ def BreakthroughMostFreqCombinations(publist, cutYear=100, TypeStr='both'):
     # 仅观察第一作者的breakthrough情况
     elif TypeStr == 'rank1':
         for _, yearpublist in publist.items():
-            yearid += 1
-            # 如果已经到了cutYear了，直接结束循环（到此，强行结束该研究者的职业生涯）。
-            if yearid > cutYear:
-                break
             # 是第一作者
             if len(yearpublist['rank1']) > 0:
+                yearid += 1
+                # 如果已经到了cutYear了，直接结束循环（到此，强行结束该研究者的职业生涯）。
+                if yearid > cutYear:
+                    break
                 # 处女作之年，要初始化
                 if len(initialSet) == 0:
                     for rank1paper in yearpublist['rank1']:
@@ -243,12 +243,12 @@ def BreakthroughMostFreqCombinations(publist, cutYear=100, TypeStr='both'):
     # 仅观察末位作者的breakthrough情况
     elif TypeStr == 'rankLast':
         for _, yearpublist in publist.items():
-            yearid += 1
-            # 如果已经到了cutYear了，直接结束循环（到此，强行结束该研究者的职业生涯）。
-            if yearid > cutYear:
-                break
             # 是末位作者
             if  len(yearpublist['rankLast']) > 0:
+                yearid += 1
+                # 如果已经到了cutYear了，直接结束循环（到此，强行结束该研究者的职业生涯）。
+                if yearid > cutYear:
+                    break
                 # 处女作之年，要初始化
                 if len(initialSet) == 0:
                     for rankLastpaper in yearpublist['rankLast']:
