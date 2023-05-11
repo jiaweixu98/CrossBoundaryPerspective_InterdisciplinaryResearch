@@ -5,9 +5,10 @@ from collections import Counter
 import pickle as pk
 
 #参数设置
-START_YAER = 1998
-END_YAER = 2002
+START_YAER = 1800
+END_YAER = 2021
 CUT_YEAR_COUNT = 3
+NO_CUT_YEAR = 100
 print('参数设置: START_YAER: %d, END_YAER: %d, CUT_YEAR_COUNT: %d'%(START_YAER, END_YAER, CUT_YEAR_COUNT))
 
 paper2journalid = pk.load(open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/paper2journalid.pk', 'rb'))
@@ -298,7 +299,7 @@ if __name__ == '__main__':
                 for authorid, publist in lines.items():
                     # 主要贡献者，START_YAER-END_YAER，cutyearCount及以上
                     if ((START_YAER-1) < StartYearpublist(publist, 'both') < (END_YAER+1)) and ( (cutyearCount-1) < TrueSpanYearpublist(publist, 'both') ):
-                        temp = BreakthroughMostFreqCombinations(publist,cutYear=cutyearCount,TypeStr='both')
+                        temp = BreakthroughMostFreqCombinations(publist,cutYear=NO_CUT_YEAR,TypeStr='both')
                         # if temp[0] == 0: # 一直没有转向
                         #     KeyInitialSetCounter[' $$ '.join(sorted(temp[1]))] += 1
                         #     KeyNoBreakthroughCounter[' $$ '.join(sorted(temp[1]))] += 1
@@ -315,11 +316,11 @@ if __name__ == '__main__':
                                 for BreakthroughFieldItem in temp[2]:
                                     # 从a跳到b, a和b不能一样
                                     if fieldItem != BreakthroughFieldItem:
-                                        KeyBreakthroughCombineCounter[fieldItem+' -->>>>-- '+BreakthroughFieldItem] += 1
+                                        KeyBreakthroughCombineCounter[fieldItem+'-->>>>--'+BreakthroughFieldItem] += 1
 
                     # 第一作者，98-02，3及以上
                     if ((START_YAER-1) < StartYearpublist(publist, 'rank1') < (END_YAER+1)) and ( (cutyearCount-1) < TrueSpanYearpublist(publist, 'rank1')):
-                        temp = BreakthroughMostFreqCombinations(publist,cutYear=cutyearCount,TypeStr='rank1')
+                        temp = BreakthroughMostFreqCombinations(publist,cutYear=NO_CUT_YEAR,TypeStr='rank1')
                         # if temp[0] == 0: # 一直没有转向
                         #     FirstInitialSetCounter[' $$ '.join(sorted(temp[1]))] += 1
                         #     FirstNoBreakthroughCounter[' $$ '.join(sorted(temp[1]))] += 1
@@ -336,10 +337,10 @@ if __name__ == '__main__':
                                 for BreakthroughFieldItem in temp[2]:
                                     # 从a跳到b, a和b不能一样
                                     if fieldItem != BreakthroughFieldItem:
-                                        KeyBreakthroughCombineCounter[fieldItem+' -->>>>-- '+BreakthroughFieldItem] += 1
+                                        FirstBreakthroughCombineCounter[fieldItem+'-->>>>--'+BreakthroughFieldItem] += 1
                     # 末位作者，98-02，3及以上
                     if ((START_YAER-1) < StartYearpublist(publist, 'rankLast') < (END_YAER+1)) and ( (cutyearCount-1) < TrueSpanYearpublist(publist, 'rankLast')):
-                        temp = BreakthroughMostFreqCombinations(publist,cutYear=cutyearCount,TypeStr='rankLast')
+                        temp = BreakthroughMostFreqCombinations(publist,cutYear=NO_CUT_YEAR,TypeStr='rankLast')
                         # if temp[0] == 0: # 一直没有转向
                         #     LastInitialSetCounter[' $$ '.join(sorted(temp[1]))] += 1
                         #     LastNoBreakthroughCounter[' $$ '.join(sorted(temp[1]))] += 1
@@ -356,7 +357,7 @@ if __name__ == '__main__':
                                 for BreakthroughFieldItem in temp[2]:
                                     # 从a跳到b, a和b不能一样
                                     if fieldItem != BreakthroughFieldItem:
-                                        LastBreakthroughCombineCounter[fieldItem+' -->>>>-- '+BreakthroughFieldItem] += 1
+                                        LastBreakthroughCombineCounter[fieldItem+'-->>>>--'+BreakthroughFieldItem] += 1
 
 
 
@@ -426,12 +427,12 @@ if __name__ == '__main__':
             print('======\n\n\n\n')
         
 
-        pk.dump(KeyInitialSetCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/KeyInitialSetCounter%d_%d_True%dCut.pk'%(START_YAER,END_YAER,cutyearCount), 'wb'))
-        pk.dump(KeyNoBreakthroughCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/KeyNoBreakthroughCounter%d_%d_True%dCut.pk'%(START_YAER,END_YAER,cutyearCount), 'wb'))
-        pk.dump(KeyBreakthroughCombineCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/KeyBreakthroughCombineCounter%d_%d_True%dCut.pk'%(START_YAER,END_YAER,cutyearCount), 'wb'))
-        pk.dump(FirstInitialSetCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/FirstInitialSetCounter%d_%d_True%dCut.pk'%(START_YAER,END_YAER,cutyearCount), 'wb'))
-        pk.dump(FirstNoBreakthroughCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/FirstNoBreakthroughCounter%d_%d_True%dCut.pk'%(START_YAER,END_YAER,cutyearCount), 'wb'))
-        pk.dump(FirstBreakthroughCombineCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/FirstBreakthroughCombineCounter%d_%d_True%dCut.pk'%(START_YAER,END_YAER,cutyearCount), 'wb'))
-        pk.dump(LastInitialSetCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/LastInitialSetCounter%d_%d_True%dCut.pk'%(START_YAER,END_YAER,cutyearCount), 'wb'))
-        pk.dump(LastNoBreakthroughCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/LastNoBreakthroughCounter%d_%d_True%dCut.pk'%(START_YAER,END_YAER,cutyearCount), 'wb'))
-        pk.dump(LastBreakthroughCombineCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/LastBreakthroughCombineCounter%d_%d_True%dCut.pk'%(START_YAER,END_YAER,cutyearCount), 'wb'))
+        pk.dump(KeyInitialSetCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/KeyInitialSetCounter%d_%d_True%dCut全生涯.pk'%(START_YAER,END_YAER,cutyearCount), 'wb'))
+        pk.dump(KeyNoBreakthroughCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/KeyNoBreakthroughCounter%d_%d_True%dCut全生涯.pk'%(START_YAER,END_YAER,cutyearCount), 'wb'))
+        pk.dump(KeyBreakthroughCombineCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/KeyBreakthroughCombineCounter%d_%d_True%dCut全生涯.pk'%(START_YAER,END_YAER,cutyearCount), 'wb'))
+        pk.dump(FirstInitialSetCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/FirstInitialSetCounter%d_%d_True%dCut全生涯.pk'%(START_YAER,END_YAER,cutyearCount), 'wb'))
+        pk.dump(FirstNoBreakthroughCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/FirstNoBreakthroughCounter%d_%d_True%dCut全生涯.pk'%(START_YAER,END_YAER,cutyearCount), 'wb'))
+        pk.dump(FirstBreakthroughCombineCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/FirstBreakthroughCombineCounter%d_%d_True%dCut全生涯.pk'%(START_YAER,END_YAER,cutyearCount), 'wb'))
+        pk.dump(LastInitialSetCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/LastInitialSetCounter%d_%d_True%dCut全生涯.pk'%(START_YAER,END_YAER,cutyearCount), 'wb'))
+        pk.dump(LastNoBreakthroughCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/LastNoBreakthroughCounter%d_%d_True%dCut全生涯.pk'%(START_YAER,END_YAER,cutyearCount), 'wb'))
+        pk.dump(LastBreakthroughCombineCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/LastBreakthroughCombineCounter%d_%d_True%dCut全生涯.pk'%(START_YAER,END_YAER,cutyearCount), 'wb'))
