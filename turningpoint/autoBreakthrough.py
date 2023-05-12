@@ -8,6 +8,7 @@ import pickle as pk
 START_YAER = 1998
 END_YAER = 2002
 CUT_YEAR_COUNT = 21
+INITIAL_SPAN = 2
 
 print('参数设置: START_YAER: %d, END_YAER: %d, CUT_YEAR_COUNT: %d'%(START_YAER, END_YAER, CUT_YEAR_COUNT))
 
@@ -174,8 +175,8 @@ def Breakthrough(publist, cutYear=100, initialSpan=1, TypeStr='both'):
     # 如果所有的文章都看完了，还没有转向，说明这个人一辈子都没有突破自己第一年的情况；输出-1，即没有转向过。
     return 0
 
-#从3开始的原因，3才可以看出转向变化对生涯的影响。
-for cutyearCount in range(2,CUT_YEAR_COUNT,1):
+#从3开始的原因，3才可以看出转向变化对生涯的影响。设置了initialSpan = 2，所以开始年份必须至少为3
+for cutyearCount in range(3,CUT_YEAR_COUNT,1):
     KeyBreakthroughCounter = Counter()
     FirstBreakthroughCounter = Counter()
     LastBreakthroughCounter = Counter()
@@ -188,14 +189,14 @@ for cutyearCount in range(2,CUT_YEAR_COUNT,1):
                 # 主要贡献者，START_YAER-END_YAER，cutyearCount及以上
                 if ((START_YAER-1) < StartYearpublist(publist, 'both') < (END_YAER+1)) and ( (cutyearCount-1) < TrueSpanYearpublist(publist, 'both') ):
                     # 共3年，此处cutYear设置为3
-                    KeyBreakthroughCounter[Breakthrough(publist,cutYear=cutyearCount,TypeStr='both')] += 1
+                    KeyBreakthroughCounter[Breakthrough(publist,cutYear=cutyearCount,initialSpan=INITIAL_SPAN,TypeStr='both')] += 1
                 # 第一作者，98-02，3及以上
                 if ((START_YAER-1) < StartYearpublist(publist, 'rank1') < (END_YAER+1)) and ( (cutyearCount-1) < TrueSpanYearpublist(publist, 'rank1')):
-                    FirstBreakthroughCounter[Breakthrough(publist,cutYear=cutyearCount,TypeStr='rank1')] += 1
+                    FirstBreakthroughCounter[Breakthrough(publist,cutYear=cutyearCount,initialSpan=INITIAL_SPAN,TypeStr='rank1')] += 1
                 # 末位作者，98-02，3及以上
                 if ((START_YAER-1) < StartYearpublist(publist, 'rankLast') < (END_YAER+1)) and ( (cutyearCount-1) < TrueSpanYearpublist(publist, 'rankLast')):
-                    LastBreakthroughCounter[Breakthrough(publist,cutYear=cutyearCount,TypeStr='rankLast')] += 1
+                    LastBreakthroughCounter[Breakthrough(publist,cutYear=cutyearCount,initialSpan=INITIAL_SPAN,TypeStr='rankLast')] += 1
 
-    pk.dump(KeyBreakthroughCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/KeyBreakthroughCounter%d_%d_True%dCut.pk'%(START_YAER,END_YAER,cutyearCount), 'wb'))
-    pk.dump(FirstBreakthroughCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/FirstBreakthroughCounter%d_%d_True%dCut.pk'%(START_YAER,END_YAER,cutyearCount), 'wb'))
-    pk.dump(LastBreakthroughCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/LastBreakthroughCounter%d_%d_True%dCut.pk'%(START_YAER,END_YAER,cutyearCount), 'wb'))
+    pk.dump(KeyBreakthroughCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/KeyBreakthroughCounter%d_%d_True%dCutInitialSpan%d.pk'%(START_YAER,END_YAER,cutyearCount,INITIAL_SPAN), 'wb'))
+    pk.dump(FirstBreakthroughCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/FirstBreakthroughCounter%d_%d_True%dCutInitialSpan%d.pk'%(START_YAER,END_YAER,cutyearCount,INITIAL_SPAN), 'wb'))
+    pk.dump(LastBreakthroughCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/LastBreakthroughCounter%d_%d_True%dCutInitialSpan%d.pk'%(START_YAER,END_YAER,cutyearCount,INITIAL_SPAN), 'wb'))
