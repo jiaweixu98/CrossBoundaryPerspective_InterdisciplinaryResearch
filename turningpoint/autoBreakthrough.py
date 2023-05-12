@@ -152,13 +152,13 @@ def Breakthrough(publist, cutYear=100, initialSpan=1, TypeStr='both'):
     elif TypeStr == 'rankLast':
         for _, yearpublist in publist.items():
             # 是末位作者
-            if len(initialSet) == 0 or yearid <= initialSpan:
+            if len(yearpublist['rankLast']) > 0:
                 yearid += 1
                 # 如果已经到了cutYear了，直接结束循环（到此，强行结束该研究者的职业生涯）。
                 if yearid > cutYear:
                     break
                 # 处女作之年，要初始化
-                if len(initialSet) == 0:
+                if len(initialSet) == 0 or yearid <= initialSpan:
                     for rankLastpaper in yearpublist['rankLast']:
                         for field in mag2journal[paper2journalid[rankLastpaper]]['FieldList']:
                             if field not in nonBreakthroughJournal:
@@ -186,17 +186,17 @@ for cutyearCount in range(3,CUT_YEAR_COUNT,1):
         for lines in tqdm(reader):
             # 看这个字典（其实此循环只有1个元素）
             for authorid, publist in lines.items():
-                # 主要贡献者，START_YAER-END_YAER，cutyearCount及以上
-                if ((START_YAER-1) < StartYearpublist(publist, 'both') < (END_YAER+1)) and ( (cutyearCount-1) < TrueSpanYearpublist(publist, 'both') ):
-                    # 共3年，此处cutYear设置为3
-                    KeyBreakthroughCounter[Breakthrough(publist,cutYear=cutyearCount,initialSpan=INITIAL_SPAN,TypeStr='both')] += 1
-                # 第一作者，98-02，3及以上
-                if ((START_YAER-1) < StartYearpublist(publist, 'rank1') < (END_YAER+1)) and ( (cutyearCount-1) < TrueSpanYearpublist(publist, 'rank1')):
-                    FirstBreakthroughCounter[Breakthrough(publist,cutYear=cutyearCount,initialSpan=INITIAL_SPAN,TypeStr='rank1')] += 1
+                # # 主要贡献者，START_YAER-END_YAER，cutyearCount及以上
+                # if ((START_YAER-1) < StartYearpublist(publist, 'both') < (END_YAER+1)) and ( (cutyearCount-1) < TrueSpanYearpublist(publist, 'both') ):
+                #     # 共3年，此处cutYear设置为3
+                #     KeyBreakthroughCounter[Breakthrough(publist,cutYear=cutyearCount,initialSpan=INITIAL_SPAN,TypeStr='both')] += 1
+                # # 第一作者，98-02，3及以上
+                # if ((START_YAER-1) < StartYearpublist(publist, 'rank1') < (END_YAER+1)) and ( (cutyearCount-1) < TrueSpanYearpublist(publist, 'rank1')):
+                #     FirstBreakthroughCounter[Breakthrough(publist,cutYear=cutyearCount,initialSpan=INITIAL_SPAN,TypeStr='rank1')] += 1
                 # 末位作者，98-02，3及以上
                 if ((START_YAER-1) < StartYearpublist(publist, 'rankLast') < (END_YAER+1)) and ( (cutyearCount-1) < TrueSpanYearpublist(publist, 'rankLast')):
                     LastBreakthroughCounter[Breakthrough(publist,cutYear=cutyearCount,initialSpan=INITIAL_SPAN,TypeStr='rankLast')] += 1
 
-    pk.dump(KeyBreakthroughCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/KeyBreakthroughCounter%d_%d_True%dCutInitialSpan%d.pk'%(START_YAER,END_YAER,cutyearCount,INITIAL_SPAN), 'wb'))
-    pk.dump(FirstBreakthroughCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/FirstBreakthroughCounter%d_%d_True%dCutInitialSpan%d.pk'%(START_YAER,END_YAER,cutyearCount,INITIAL_SPAN), 'wb'))
+    # pk.dump(KeyBreakthroughCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/KeyBreakthroughCounter%d_%d_True%dCutInitialSpan%d.pk'%(START_YAER,END_YAER,cutyearCount,INITIAL_SPAN), 'wb'))
+    # pk.dump(FirstBreakthroughCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/FirstBreakthroughCounter%d_%d_True%dCutInitialSpan%d.pk'%(START_YAER,END_YAER,cutyearCount,INITIAL_SPAN), 'wb'))
     pk.dump(LastBreakthroughCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/LastBreakthroughCounter%d_%d_True%dCutInitialSpan%d.pk'%(START_YAER,END_YAER,cutyearCount,INITIAL_SPAN), 'wb'))
