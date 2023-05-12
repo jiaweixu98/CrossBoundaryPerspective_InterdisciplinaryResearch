@@ -72,8 +72,11 @@ def TrueSpanYearpublist(publist, Typestr='both'):
 
 ##################################################################################################################
 # 主要参与者JCR学科BreakThrough的时间点, 参数cutYear是纳入观察的年数
-def Breakthrough(publist, cutYear=100, TypeStr='both'):
+def Breakthrough(publist, cutYear=100, initialSpan=1, TypeStr='both'):
     # yearPublist  {2023:{'rank1':set(), 'rankLast':set(), 'others':set() }, ...}
+    # cutYear是控制的年数，必须比initialSpan大1或以上
+    if cutYear <= initialSpan:
+        raise('初始学科年份与生涯长度不匹配')
     initialSet = set()
     yearid = 0
     if TypeStr == 'both':
@@ -86,7 +89,7 @@ def Breakthrough(publist, cutYear=100, TypeStr='both'):
                 if yearid > cutYear:
                     break
                 # 处女作之年，要初始化
-                if len(initialSet) == 0:
+                if len(initialSet) == 0 or yearid <= initialSpan:
                     for rank1paper in yearpublist['rank1']:
                         for field in mag2journal[paper2journalid[rank1paper]]['FieldList']:
                             if field not in nonBreakthroughJournal:
@@ -125,7 +128,7 @@ def Breakthrough(publist, cutYear=100, TypeStr='both'):
                 if yearid > cutYear:
                     break
                 # 处女作之年，要初始化
-                if len(initialSet) == 0:
+                if len(initialSet) == 0 or yearid <= initialSpan:
                     for rank1paper in yearpublist['rank1']:
                         for field in mag2journal[paper2journalid[rank1paper]]['FieldList']:
                             if field not in nonBreakthroughJournal:
@@ -147,7 +150,7 @@ def Breakthrough(publist, cutYear=100, TypeStr='both'):
     elif TypeStr == 'rankLast':
         for _, yearpublist in publist.items():
             # 是末位作者
-            if  len(yearpublist['rankLast']) > 0:
+            if len(initialSet) == 0 or yearid <= initialSpan:
                 yearid += 1
                 # 如果已经到了cutYear了，直接结束循环（到此，强行结束该研究者的职业生涯）。
                 if yearid > cutYear:
@@ -170,12 +173,16 @@ def Breakthrough(publist, cutYear=100, TypeStr='both'):
     # 如果所有的文章都看完了，还没有转向，说明这个人一辈子都没有突破自己第一年的情况；输出-1，即没有转向过。
     return 0
 
+
     
 
-def BreakthroughMostFreqCombinations(publist, cutYear=100, TypeStr='both'):
+def BreakthroughMostFreqCombinations(publist, cutYear=100, initialSpan=1,TypeStr='both'):
     # yearPublist  {2023:{'rank1':set(), 'rankLast':set(), 'others':set() }, ...}
     initialSet = set()
     yearid = 0
+    # cutYear是控制的年数，必须比initialSpan大1或以上
+    if cutYear <= initialSpan:
+        raise('初始学科年份与生涯长度不匹配')
     if TypeStr == 'both':
         for _, yearpublist in publist.items():
             if len(yearpublist['rank1']) > 0 or len(yearpublist['rankLast']) > 0:
@@ -185,7 +192,7 @@ def BreakthroughMostFreqCombinations(publist, cutYear=100, TypeStr='both'):
                 if yearid > cutYear:
                     break
                 # 处女作之年，要初始化
-                if len(initialSet) == 0:
+                if len(initialSet) == 0 or yearid <= initialSpan:
                     for rank1paper in yearpublist['rank1']:
                         for field in mag2journal[paper2journalid[rank1paper]]['FieldList']:
                             if field not in nonBreakthroughJournal:
@@ -224,7 +231,7 @@ def BreakthroughMostFreqCombinations(publist, cutYear=100, TypeStr='both'):
                 if yearid > cutYear:
                     break
                 # 处女作之年，要初始化
-                if len(initialSet) == 0:
+                if len(initialSet) == 0 or yearid <= initialSpan:
                     for rank1paper in yearpublist['rank1']:
                         for field in mag2journal[paper2journalid[rank1paper]]['FieldList']:
                             if field not in nonBreakthroughJournal:
@@ -252,7 +259,7 @@ def BreakthroughMostFreqCombinations(publist, cutYear=100, TypeStr='both'):
                 if yearid > cutYear:
                     break
                 # 处女作之年，要初始化
-                if len(initialSet) == 0:
+                if len(initialSet) == 0 or yearid <= initialSpan:
                     for rankLastpaper in yearpublist['rankLast']:
                         for field in mag2journal[paper2journalid[rankLastpaper]]['FieldList']:
                             if field not in nonBreakthroughJournal:
@@ -300,64 +307,64 @@ if __name__ == '__main__':
                     # 主要贡献者，START_YAER-END_YAER，cutyearCount及以上
                     if ((START_YAER-1) < StartYearpublist(publist, 'both') < (END_YAER+1)) and ( (cutyearCount-1) < TrueSpanYearpublist(publist, 'both') ):
                         temp = BreakthroughMostFreqCombinations(publist,cutYear=NO_CUT_YEAR,TypeStr='both')
-                        # if temp[0] == 0: # 一直没有转向
-                        #     KeyInitialSetCounter[' $$ '.join(sorted(temp[1]))] += 1
-                        #     KeyNoBreakthroughCounter[' $$ '.join(sorted(temp[1]))] += 1
-                        # else: # 发生过转向
-                        #     KeyInitialSetCounter[' $$ '.join(sorted(temp[1]))] += 1
-                        #     KeyBreakthroughCombineCounter[' $$ '.join(sorted(temp[1]))+'------'+' $$ '.join(sorted(temp[2]))] += 1
                         if temp[0] == 0: # 一直没有转向
-                            for fieldItem in temp[1]:
-                                KeyInitialSetCounter[fieldItem] += 1
-                                KeyNoBreakthroughCounter[fieldItem] += 1
+                            KeyInitialSetCounter[' $$ '.join(sorted(temp[1]))] += 1
+                            KeyNoBreakthroughCounter[' $$ '.join(sorted(temp[1]))] += 1
                         else: # 发生过转向
-                            for fieldItem in temp[1]:
-                                KeyInitialSetCounter[fieldItem] += 1
-                                for BreakthroughFieldItem in temp[2]:
-                                    # 从a跳到b, a和b不能一样
-                                    if fieldItem != BreakthroughFieldItem:
-                                        KeyBreakthroughCombineCounter[fieldItem+'-->>>>--'+BreakthroughFieldItem] += 1
+                            KeyInitialSetCounter[' $$ '.join(sorted(temp[1]))] += 1
+                            KeyBreakthroughCombineCounter[' $$ '.join(sorted(temp[1]))+'------'+' $$ '.join(sorted(temp[2]))] += 1
+                        # if temp[0] == 0: # 一直没有转向
+                        #     for fieldItem in temp[1]:
+                        #         KeyInitialSetCounter[fieldItem] += 1
+                        #         KeyNoBreakthroughCounter[fieldItem] += 1
+                        # else: # 发生过转向
+                        #     for fieldItem in temp[1]:
+                        #         KeyInitialSetCounter[fieldItem] += 1
+                        #         for BreakthroughFieldItem in temp[2]:
+                        #             # 从a跳到b, a和b不能一样
+                        #             if fieldItem != BreakthroughFieldItem:
+                        #                 KeyBreakthroughCombineCounter[fieldItem+'-->>>>--'+BreakthroughFieldItem] += 1
 
                     # 第一作者，98-02，3及以上
                     if ((START_YAER-1) < StartYearpublist(publist, 'rank1') < (END_YAER+1)) and ( (cutyearCount-1) < TrueSpanYearpublist(publist, 'rank1')):
                         temp = BreakthroughMostFreqCombinations(publist,cutYear=NO_CUT_YEAR,TypeStr='rank1')
-                        # if temp[0] == 0: # 一直没有转向
-                        #     FirstInitialSetCounter[' $$ '.join(sorted(temp[1]))] += 1
-                        #     FirstNoBreakthroughCounter[' $$ '.join(sorted(temp[1]))] += 1
-                        # else: # 发生过转向
-                        #     FirstInitialSetCounter[' $$ '.join(sorted(temp[1]))] += 1
-                        #     FirstBreakthroughCombineCounter[' $$ '.join(sorted(temp[1]))+'------'+' $$ '.join(sorted(temp[2]))]+= 1
                         if temp[0] == 0: # 一直没有转向
-                            for fieldItem in temp[1]:
-                                FirstInitialSetCounter[fieldItem] += 1
-                                FirstNoBreakthroughCounter[fieldItem] += 1
+                            FirstInitialSetCounter[' $$ '.join(sorted(temp[1]))] += 1
+                            FirstNoBreakthroughCounter[' $$ '.join(sorted(temp[1]))] += 1
                         else: # 发生过转向
-                            for fieldItem in temp[1]:
-                                FirstInitialSetCounter[fieldItem] += 1
-                                for BreakthroughFieldItem in temp[2]:
-                                    # 从a跳到b, a和b不能一样
-                                    if fieldItem != BreakthroughFieldItem:
-                                        FirstBreakthroughCombineCounter[fieldItem+'-->>>>--'+BreakthroughFieldItem] += 1
+                            FirstInitialSetCounter[' $$ '.join(sorted(temp[1]))] += 1
+                            FirstBreakthroughCombineCounter[' $$ '.join(sorted(temp[1]))+'------'+' $$ '.join(sorted(temp[2]))]+= 1
+                        # if temp[0] == 0: # 一直没有转向
+                        #     for fieldItem in temp[1]:
+                        #         FirstInitialSetCounter[fieldItem] += 1
+                        #         FirstNoBreakthroughCounter[fieldItem] += 1
+                        # else: # 发生过转向
+                        #     for fieldItem in temp[1]:
+                        #         FirstInitialSetCounter[fieldItem] += 1
+                        #         for BreakthroughFieldItem in temp[2]:
+                        #             # 从a跳到b, a和b不能一样
+                        #             if fieldItem != BreakthroughFieldItem:
+                        #                 FirstBreakthroughCombineCounter[fieldItem+'-->>>>--'+BreakthroughFieldItem] += 1
                     # 末位作者，98-02，3及以上
                     if ((START_YAER-1) < StartYearpublist(publist, 'rankLast') < (END_YAER+1)) and ( (cutyearCount-1) < TrueSpanYearpublist(publist, 'rankLast')):
                         temp = BreakthroughMostFreqCombinations(publist,cutYear=NO_CUT_YEAR,TypeStr='rankLast')
-                        # if temp[0] == 0: # 一直没有转向
-                        #     LastInitialSetCounter[' $$ '.join(sorted(temp[1]))] += 1
-                        #     LastNoBreakthroughCounter[' $$ '.join(sorted(temp[1]))] += 1
-                        # else: # 发生过转向
-                        #     LastInitialSetCounter[' $$ '.join(sorted(temp[1]))] += 1
-                        #     LastBreakthroughCombineCounter[' $$ '.join(sorted(temp[1]))+'------'+' $$ '.join(sorted(temp[2]))]+= 1
                         if temp[0] == 0: # 一直没有转向
-                            for fieldItem in temp[1]:
-                                LastInitialSetCounter[fieldItem] += 1
-                                LastNoBreakthroughCounter[fieldItem] += 1
+                            LastInitialSetCounter[' $$ '.join(sorted(temp[1]))] += 1
+                            LastNoBreakthroughCounter[' $$ '.join(sorted(temp[1]))] += 1
                         else: # 发生过转向
-                            for fieldItem in temp[1]:
-                                LastInitialSetCounter[fieldItem] += 1
-                                for BreakthroughFieldItem in temp[2]:
-                                    # 从a跳到b, a和b不能一样
-                                    if fieldItem != BreakthroughFieldItem:
-                                        LastBreakthroughCombineCounter[fieldItem+'-->>>>--'+BreakthroughFieldItem] += 1
+                            LastInitialSetCounter[' $$ '.join(sorted(temp[1]))] += 1
+                            LastBreakthroughCombineCounter[' $$ '.join(sorted(temp[1]))+'------'+' $$ '.join(sorted(temp[2]))]+= 1
+                        # if temp[0] == 0: # 一直没有转向
+                        #     for fieldItem in temp[1]:
+                        #         LastInitialSetCounter[fieldItem] += 1
+                        #         LastNoBreakthroughCounter[fieldItem] += 1
+                        # else: # 发生过转向
+                        #     for fieldItem in temp[1]:
+                        #         LastInitialSetCounter[fieldItem] += 1
+                        #         for BreakthroughFieldItem in temp[2]:
+                        #             # 从a跳到b, a和b不能一样
+                        #             if fieldItem != BreakthroughFieldItem:
+                        #                 LastBreakthroughCombineCounter[fieldItem+'-->>>>--'+BreakthroughFieldItem] += 1
 
 
 

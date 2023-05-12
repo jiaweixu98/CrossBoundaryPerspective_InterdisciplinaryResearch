@@ -73,8 +73,11 @@ def TrueSpanYearpublist(publist, Typestr='both'):
 
 ##################################################################################################################
 # 主要参与者JCR学科BreakThrough的时间点, 参数cutYear是纳入观察的年数
-def Breakthrough(publist, cutYear=100, TypeStr='both'):
+def Breakthrough(publist, cutYear=100, initialSpan=1, TypeStr='both'):
     # yearPublist  {2023:{'rank1':set(), 'rankLast':set(), 'others':set() }, ...}
+    # cutYear是控制的年数，必须比initialSpan大1或以上
+    if cutYear <= initialSpan:
+        raise('初始学科年份与生涯长度不匹配')
     initialSet = set()
     yearid = 0
     if TypeStr == 'both':
@@ -87,7 +90,7 @@ def Breakthrough(publist, cutYear=100, TypeStr='both'):
                 if yearid > cutYear:
                     break
                 # 处女作之年，要初始化
-                if len(initialSet) == 0:
+                if len(initialSet) == 0 or yearid <= initialSpan:
                     for rank1paper in yearpublist['rank1']:
                         for field in mag2journal[paper2journalid[rank1paper]]['FieldList']:
                             if field not in nonBreakthroughJournal:
@@ -126,7 +129,7 @@ def Breakthrough(publist, cutYear=100, TypeStr='both'):
                 if yearid > cutYear:
                     break
                 # 处女作之年，要初始化
-                if len(initialSet) == 0:
+                if len(initialSet) == 0 or yearid <= initialSpan:
                     for rank1paper in yearpublist['rank1']:
                         for field in mag2journal[paper2journalid[rank1paper]]['FieldList']:
                             if field not in nonBreakthroughJournal:
@@ -148,7 +151,7 @@ def Breakthrough(publist, cutYear=100, TypeStr='both'):
     elif TypeStr == 'rankLast':
         for _, yearpublist in publist.items():
             # 是末位作者
-            if  len(yearpublist['rankLast']) > 0:
+            if len(initialSet) == 0 or yearid <= initialSpan:
                 yearid += 1
                 # 如果已经到了cutYear了，直接结束循环（到此，强行结束该研究者的职业生涯）。
                 if yearid > cutYear:
