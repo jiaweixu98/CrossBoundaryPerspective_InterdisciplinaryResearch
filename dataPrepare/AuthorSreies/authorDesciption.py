@@ -1,4 +1,4 @@
-# nohup python -u authorDesciption.py > authorDesciption.log 2>&1 &
+# nohup python -u authorDesciption.py > authorDesciptionForCAS.log 2>&1 &
 
 import jsonlines
 from tqdm import tqdm
@@ -39,7 +39,7 @@ RankNotIMportantAuthornumPubYearsFreq = Counter()
 
 
 # n = 100
-with jsonlines.open('../../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/authorSeq.jsonl', mode='r') as reader:
+with jsonlines.open('../../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/CASauthorSeq.jsonl', mode='r') as reader:
     for lines in tqdm(reader):
         # n -= 1
         # if n == 0:
@@ -56,9 +56,9 @@ with jsonlines.open('../../../DataCrossBoundaryPerspective_InterdisciplinaryRese
 # print(RankLasTauthornumPubYearsFreq)
 # print(RankIMportantAuthornumPubYearsFreq)
 
-pk.dump(authornumPubYearsFreq, open('../../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/authornumPubYearsFreq.pk', 'wb'))
-pk.dump(Rank1authornumPubYearsFreq, open('../../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/Rank1authornumPubYearsFreq.pk', 'wb'))
-pk.dump(RankLasTauthornumPubYearsFreq, open('../../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/RankLasTauthornumPubYearsFreq.pk', 'wb'))
-pk.dump(RankIMportantAuthornumPubYearsFreq, open('../../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/RankIMportantAuthornumPubYearsFreq.pk', 'wb'))
-pk.dump(RankNotIMportantAuthornumPubYearsFreq, open('../../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/RankNotIMportantAuthornumPubYearsFreq.pk', 'wb'))
+pk.dump(authornumPubYearsFreq, open('../../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/CASauthornumPubYearsFreq.pk', 'wb'))
+pk.dump(Rank1authornumPubYearsFreq, open('../../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/CASRank1authornumPubYearsFreq.pk', 'wb'))
+pk.dump(RankLasTauthornumPubYearsFreq, open('../../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/CASRankLasTauthornumPubYearsFreq.pk', 'wb'))
+pk.dump(RankIMportantAuthornumPubYearsFreq, open('../../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/CASRankIMportantAuthornumPubYearsFreq.pk', 'wb'))
+pk.dump(RankNotIMportantAuthornumPubYearsFreq, open('../../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/CASRankNotIMportantAuthornumPubYearsFreq.pk', 'wb'))
 
