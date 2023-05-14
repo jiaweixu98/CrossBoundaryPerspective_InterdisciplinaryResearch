@@ -23,6 +23,10 @@ def StartYearpublist(publist, Typestr='both'):
         for year, yearpublist in publist.items():
             if len(yearpublist['rankLast']) > 0:
                 return int(year)
+    if Typestr == 'all':
+        for year, yearpublist in publist.items():
+            if len(yearpublist['rank1']) > 0 or len(yearpublist['rankLast']) > 0 or len(yearpublist['others']) > 0:
+                return int(year)
     return -1
 # 主要负责文献：休止年份
 def EndYearpublist(publist, Typestr='both'):
@@ -37,6 +41,10 @@ def EndYearpublist(publist, Typestr='both'):
     elif Typestr == 'rankLast':
         for year, yearpublist in sorted(publist.items(), reverse=True):
             if len(yearpublist['rankLast']) > 0:
+                return int(year)
+    if Typestr == 'all':
+        for year, yearpublist in sorted(publist.items(), reverse=True):
+            if len(yearpublist['rank1']) > 0 or len(yearpublist['rankLast']) or len(yearpublist['others']) > 0:
                 return int(year)
     return -1
 # 主要负责文献：年份跨度
@@ -58,6 +66,10 @@ def TrueSpanYearpublist(publist, Typestr='both'):
     elif Typestr == 'rankLast':
         for _, yearpublist in publist.items():
             if len(yearpublist['rankLast']) > 0:
+                truthSpan += 1
+    elif Typestr == 'all':
+        for _, yearpublist in publist.items():
+            if len(yearpublist['rank1']) > 0 or len(yearpublist['rankLast']) > 0 or len(yearpublist['others']) > 0:
                 truthSpan += 1
     return truthSpan
 
@@ -177,22 +189,7 @@ def cumLastJournalNum(publist):
 
 
 
-# ##############################################################################################################
 
-# 主要负责文献：开始年份
-def keyStartYearpublist(publist):
-    # yearPublist  {2023:{'rank1':set(), 'rankLast':set(), 'others':set() }, ...}
-    for year, yearpublist in publist.items():
-        if len(yearpublist['rank1']) > 0 or len(yearpublist['rankLast']) > 0:
-            return int(year)
-# 主要负责文献：休止年份
-def keyEndYearpublist(publist):
-    for year, yearpublist in sorted(publist.items(), reverse=True):
-        if len(yearpublist['rank1']) > 0 or len(yearpublist['rankLast']) > 0:
-            return int(year)
-# 主要负责文献：年份跨度
-def keySpanYearpublist(publist):
-    return keyEndYearpublist(publist) - keyStartYearpublist(publist)
 
 
 
@@ -447,6 +444,7 @@ ControlAllCASFieldSeriesCombineDict = {}
 CountBoth = 0
 CountFirst = 0
 CountLast = 0
+CountAll = 0
 # FinalActiveAuthorSeq里面的作者发文，是按顺序来的
 with jsonlines.open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/activeAuthorSeqForCAS.jsonl', mode='r') as reader:
     # 每一行是一个字典
@@ -454,6 +452,28 @@ with jsonlines.open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearc
         # 看这个字典（其实此循环只有1个元素）
         for authorid, publist in lines.items():
             # 1999年至2003年，真实年份为7年
+            if (1998< StartYearpublist(publist, 'all') < 2004) and ( 6 < TrueSpanYearpublist(publist, 'all') < 8):
+                CountAll += 1
+                for yearid, keyPubNum in cumAllJCASFieldNum(publist).items():
+                    if yearid not in ControlAllCASFieldSeriesCombineDict:
+                        ControlAllCASFieldSeriesCombineDict[yearid] = [keyPubNum]
+                    else:
+                        ControlAllCASFieldSeriesCombineDict[yearid].append(keyPubNum)
+                for yearid, keyPubNum in ListAllPub(publist).items():
+                    if yearid not in ControlAllSeriesCombineDict:
+                        ControlAllSeriesCombineDict[yearid] = [keyPubNum]
+                    else:
+                        ControlAllSeriesCombineDict[yearid].append(keyPubNum)
+                for yearid, keyPubNum in cumAllJFieldNum(publist).items():
+                    if yearid not in ControlAllFieldSeriesCombineDict:
+                        ControlAllFieldSeriesCombineDict[yearid] = [keyPubNum]
+                    else:
+                        ControlAllFieldSeriesCombineDict[yearid].append(keyPubNum)
+                for yearid, keyPubNum in cumAllJournalNum(publist).items():
+                    if yearid not in ControlAllJournalSeriesCombineDict:
+                        ControlAllJournalSeriesCombineDict[yearid] = [keyPubNum]
+                    else:
+                        ControlAllJournalSeriesCombineDict[yearid].append(keyPubNum)
             if (1998< StartYearpublist(publist, 'both') < 2004) and ( 6 < TrueSpanYearpublist(publist, 'both') < 8):
                 CountBoth += 1
                 for yearid, keyPubNum in cumKeyJCASFieldNum(publist).items():
@@ -476,26 +496,7 @@ with jsonlines.open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearc
                         ControlKeyJournalSeriesCombineDict[yearid] = [keyPubNum]
                     else:
                         ControlKeyJournalSeriesCombineDict[yearid].append(keyPubNum)
-                for yearid, keyPubNum in cumAllJCASFieldNum(publist).items():
-                    if yearid not in ControlAllCASFieldSeriesCombineDict:
-                        ControlAllCASFieldSeriesCombineDict[yearid] = [keyPubNum]
-                    else:
-                        ControlAllCASFieldSeriesCombineDict[yearid].append(keyPubNum)
-                for yearid, keyPubNum in ListAllPub(publist).items():
-                    if yearid not in ControlAllSeriesCombineDict:
-                        ControlAllSeriesCombineDict[yearid] = [keyPubNum]
-                    else:
-                        ControlAllSeriesCombineDict[yearid].append(keyPubNum)
-                for yearid, keyPubNum in cumAllJFieldNum(publist).items():
-                    if yearid not in ControlAllFieldSeriesCombineDict:
-                        ControlAllFieldSeriesCombineDict[yearid] = [keyPubNum]
-                    else:
-                        ControlAllFieldSeriesCombineDict[yearid].append(keyPubNum)
-                for yearid, keyPubNum in cumAllJournalNum(publist).items():
-                    if yearid not in ControlAllJournalSeriesCombineDict:
-                        ControlAllJournalSeriesCombineDict[yearid] = [keyPubNum]
-                    else:
-                        ControlAllJournalSeriesCombineDict[yearid].append(keyPubNum)
+                
             if (1998< StartYearpublist(publist, 'rank1') < 2004) and ( 6 < TrueSpanYearpublist(publist, 'rank1') < 8):
                 CountFirst += 1
                  # CAS学科
@@ -746,22 +747,22 @@ pk.dump(LastJCASFieldSeriesAVGdict, open('../../DataCrossBoundaryPerspective_Int
 pk.dump(AllJCASFieldSeriesAVGdict, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/ControlAllJCASFieldSeriesAVGdict.pk', 'wb'))
 
 # 存JCR学科平均数, KeyJCRFieldSeriesAVGdict
-KeyJCRFieldSeriesAVGdict = {}
-FirstJCRFieldSeriesAVGdict = {}
-LastJCRFieldSeriesAVGdict = {}
-AllJCRFieldSeriesAVGdict = {}
-for k,v in KeyFieldSeriesCombineDict.items():
-    KeyJCRFieldSeriesAVGdict[k] = sum(v)/len(v)
-for k,v in FirstFieldSeriesCombineDict.items():
-    FirstJCRFieldSeriesAVGdict[k] = sum(v)/len(v)
-for k,v in LastFieldSeriesCombineDict.items():
-    LastJCRFieldSeriesAVGdict[k] = sum(v)/len(v)
-for k,v in AllFieldSeriesCombineDict.items():
-    AllJCRFieldSeriesAVGdict[k] = sum(v)/len(v)
-pk.dump(KeyJCRFieldSeriesAVGdict, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/KeyJCRFieldSeriesAVGdict.pk', 'wb'))
-pk.dump(FirstJCRFieldSeriesAVGdict, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/FirstJCRFieldSeriesAVGdict.pk', 'wb'))
-pk.dump(LastJCRFieldSeriesAVGdict, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/LastJCRFieldSeriesAVGdict.pk', 'wb'))
-pk.dump(AllJCRFieldSeriesAVGdict, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/AllJCRFieldSeriesAVGdict.pk', 'wb'))
+# KeyJCRFieldSeriesAVGdict = {}
+# FirstJCRFieldSeriesAVGdict = {}
+# LastJCRFieldSeriesAVGdict = {}
+# AllJCRFieldSeriesAVGdict = {}
+# for k,v in KeyFieldSeriesCombineDict.items():
+#     KeyJCRFieldSeriesAVGdict[k] = sum(v)/len(v)
+# for k,v in FirstFieldSeriesCombineDict.items():
+#     FirstJCRFieldSeriesAVGdict[k] = sum(v)/len(v)
+# for k,v in LastFieldSeriesCombineDict.items():
+#     LastJCRFieldSeriesAVGdict[k] = sum(v)/len(v)
+# for k,v in AllFieldSeriesCombineDict.items():
+#     AllJCRFieldSeriesAVGdict[k] = sum(v)/len(v)
+# pk.dump(KeyJCRFieldSeriesAVGdict, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/KeyJCRFieldSeriesAVGdict.pk', 'wb'))
+# pk.dump(FirstJCRFieldSeriesAVGdict, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/FirstJCRFieldSeriesAVGdict.pk', 'wb'))
+# pk.dump(LastJCRFieldSeriesAVGdict, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/LastJCRFieldSeriesAVGdict.pk', 'wb'))
+# pk.dump(AllJCRFieldSeriesAVGdict, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/AllJCRFieldSeriesAVGdict.pk', 'wb'))
 
 
 # 存JCR学科平均数， 控制后
@@ -784,22 +785,22 @@ pk.dump(AllJCRFieldSeriesAVGdict, open('../../DataCrossBoundaryPerspective_Inter
 
 
 # 存期刊数平均数 KeyJournalSeriesAVGdict
-KeyJournalSeriesAVGdict = {}
-FirstJournalSeriesAVGdict = {}
-LastJournalSeriesAVGdict = {}
-AllJournalSeriesAVGdict = {}
-for k,v in KeyJournalSeriesCombineDict.items():
-    KeyJournalSeriesAVGdict[k] = sum(v)/len(v)
-for k,v in FirstJournalSeriesCombineDict.items():
-    FirstJournalSeriesAVGdict[k] = sum(v)/len(v)
-for k,v in LastJournalSeriesCombineDict.items():
-    LastJournalSeriesAVGdict[k] = sum(v)/len(v)
-for k,v in AllJournalSeriesCombineDict.items():
-    AllJournalSeriesAVGdict[k] = sum(v)/len(v)
-pk.dump(KeyJournalSeriesAVGdict, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/KeyJournalSeriesAVGdict.pk', 'wb'))
-pk.dump(FirstJournalSeriesAVGdict, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/FirstJournalSeriesAVGdict.pk', 'wb'))
-pk.dump(LastJournalSeriesAVGdict, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/LastJournalSeriesAVGdict.pk', 'wb'))
-pk.dump(AllJournalSeriesAVGdict, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/AllJournalSeriesAVGdict.pk', 'wb'))
+# KeyJournalSeriesAVGdict = {}
+# FirstJournalSeriesAVGdict = {}
+# LastJournalSeriesAVGdict = {}
+# AllJournalSeriesAVGdict = {}
+# for k,v in KeyJournalSeriesCombineDict.items():
+#     KeyJournalSeriesAVGdict[k] = sum(v)/len(v)
+# for k,v in FirstJournalSeriesCombineDict.items():
+#     FirstJournalSeriesAVGdict[k] = sum(v)/len(v)
+# for k,v in LastJournalSeriesCombineDict.items():
+#     LastJournalSeriesAVGdict[k] = sum(v)/len(v)
+# for k,v in AllJournalSeriesCombineDict.items():
+#     AllJournalSeriesAVGdict[k] = sum(v)/len(v)
+# pk.dump(KeyJournalSeriesAVGdict, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/KeyJournalSeriesAVGdict.pk', 'wb'))
+# pk.dump(FirstJournalSeriesAVGdict, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/FirstJournalSeriesAVGdict.pk', 'wb'))
+# pk.dump(LastJournalSeriesAVGdict, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/LastJournalSeriesAVGdict.pk', 'wb'))
+# pk.dump(AllJournalSeriesAVGdict, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/AllJournalSeriesAVGdict.pk', 'wb'))
 
 # 存期刊数平均数 （控制后）
 KeyJournalSeriesAVGdict = {}
@@ -826,6 +827,7 @@ pk.dump(AllJournalSeriesAVGdict, open('../../DataCrossBoundaryPerspective_Interd
 #                 # 只保留职业生涯短于80年的
 #                 if commonspanYearpublist(publist) < 81:
 #                     writer.write({authorid: publist})
-print('CountBoth)',CountBoth)
+print('CountBoth',CountBoth)
 print('CountFirst',CountFirst)
 print('CountLast',CountLast)
+print('CountAll',CountAll)

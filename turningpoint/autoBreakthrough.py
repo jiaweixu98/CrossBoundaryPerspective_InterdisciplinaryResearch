@@ -13,7 +13,7 @@ CUT_YEAR_COUNT = 17
 INITIAL_SPAN = 1
 CATE_TYPE = 'CAS'
 
-print('参数设置: START_YAER: %d, END_YAER: %d, CUT_YEAR_COUNT: %d, CATE_TYPE %s'%(START_YAER, END_YAER, CUT_YEAR_COUNT,CATE_TYPE))
+print('参数设置: START_YAER: %d, END_YAER: %d, CUT_YEAR_COUNT: %d, CATE_TYPE %s, INITIAL_SPAN%d'%(START_YAER, END_YAER, CUT_YEAR_COUNT,CATE_TYPE,INITIAL_SPAN))
 
 
 paper2journalid = pk.load(open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/paper2journalid.pk', 'rb'))
