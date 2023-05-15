@@ -1,5 +1,5 @@
 # nohup python -u autoBreakthrough.py -u > CASautoBreakthrough1999-2003INITIAL_SPAN1JCR.log 2>&1 &
-# nohup python -u autoBreakthrough.py -u > CASautoBreakthrough1999-2003INITIAL_SPAN1CAS.log 2>&1 &
+# nohup python -u autoBreakthrough.py > CASautoBreakthrough1999-2003INITIAL_SPAN1CAS.log 2>&1 &
 
 import jsonlines
 from tqdm import tqdm
