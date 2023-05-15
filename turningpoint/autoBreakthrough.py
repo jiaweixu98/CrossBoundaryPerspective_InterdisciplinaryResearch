@@ -180,7 +180,7 @@ def Breakthrough(publist, cutYear=100, initialSpan=1, TypeStr='both'):
     return 0
 
 
-# 主要参与者CAS学科BreakThrough的时间点, 参数cutYear是纳入观察的年数
+# 主要参与者CAS学科BreakThrough的时间点(采用中科院分区), 参数cutYear是纳入观察的年数
 def BreakthroughForCAS(publist, cutYear=100, initialSpan=1, TypeStr='both'):
     # yearPublist  {2023:{'rank1':set(), 'rankLast':set(), 'others':set() }, ...}
     # cutYear是控制的年数，必须比initialSpan大1或以上
@@ -190,14 +190,13 @@ def BreakthroughForCAS(publist, cutYear=100, initialSpan=1, TypeStr='both'):
     yearid = 0
     if TypeStr == 'both':
         for _, yearpublist in publist.items():
-            
             # 是第一作者或末位作者
             if len(yearpublist['rank1']) > 0 or len(yearpublist['rankLast']) > 0:
                 yearid += 1
                 # 如果已经到了cutYear了，直接结束循环（到此，强行结束该研究者的职业生涯）。
                 if yearid > cutYear:
                     break
-                # 处女作之年，要初始化
+                # 处女作之年，必须要找到初始化的学科分类，如果该作者的所有发文（截至cutyear）都是在综合性期刊上，那么就没有研究方向。
                 if len(initialSet) == 0 or yearid <= initialSpan:
                     for rank1paper in yearpublist['rank1']:
                         field = magid2bigcategory[paper2journalid[rank1paper]]
