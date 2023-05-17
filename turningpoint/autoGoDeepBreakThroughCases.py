@@ -1,4 +1,4 @@
-# nohup python -u autoGoDeepBreakThroughCases.py > autoGoDeepBreakThroughCasesForCAS_SPAN1CreerLength.log 2>&1 &
+# nohup python -u autoGoDeepBreakThroughCases.py > autoGoDeepBreakThroughCasesForCAS_SPAN1YearlyChange.log 2>&1 &
 import jsonlines
 from tqdm import tqdm
 from collections import Counter
@@ -732,11 +732,11 @@ if __name__ == '__main__':
         #     pass
         #     print('======\n\n\n\n')
 # 时间变化
-        keyYearlyStartCounter = Counter() # 某年，多少人开始职业生涯
-        keyYearlyCrossCounter = Counter() # 在某年开始职业生涯的人，有多少跨过界
-        # 管理学
-        keyYearlyStartCounterManagement = Counter()
-        keyYearlyCrossCounterManagement = Counter()
+        # keyYearlyStartCounter = Counter() # 某年，多少人开始职业生涯
+        # keyYearlyCrossCounter = Counter() # 在某年开始职业生涯的人，有多少跨过界
+        # # 管理学
+        # keyYearlyStartCounterManagement = Counter()
+        # keyYearlyCrossCounterManagement = Counter()
         pk.dump(keyYearlyStartCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/keyYearlyStartCounter%d_%d_True%dCut全生涯Span%d.pk'%(START_YAER,END_YAER,cutyearCount,INITIAL_SPAN), 'wb'))
         pk.dump(keyYearlyCrossCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/keyYearlyCrossCounter%d_%d_True%dCut全生涯Span%d.pk'%(START_YAER,END_YAER,cutyearCount,INITIAL_SPAN), 'wb'))
         pk.dump(keyYearlyStartCounterManagement, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/keyYearlyStartCounterManagement%d_%d_True%dCut全生涯Span%d.pk'%(START_YAER,END_YAER,cutyearCount,INITIAL_SPAN), 'wb'))
