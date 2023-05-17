@@ -72,6 +72,7 @@ def refInterdisciplinarity(paper):
     # pi 和 pj 都有了
     try:
         Pijlist = reflist/reflist.sum()
+        # 这里非常坑，不会报错
     except:
         # 如果报错，一定是分母为0，跨学科性设为0即可
         return 0
