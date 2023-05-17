@@ -77,8 +77,12 @@ def refInterdisciplinarity(paper):
         return 0
     # 跨学科性初始化为0
     idDegree = 0
-    # 年份，影响差异性的取值
-    year = paperYear[paper]
+    # 年份，影响差异性的取值; 很奇怪有些paper没有年份(来自1800或者2022，不用管了)
+    try:
+        year = paperYear[paper]
+    except:
+        print('no year! key error: ',paper)
+        return 0
     for i in range(18):
         if Pijlist[i] == 0:
             continue
@@ -91,7 +95,7 @@ def refInterdisciplinarity(paper):
 for paper in tqdm(paperSet):
     paper2idDegree[paper] = refInterdisciplinarity(paper)
 
-print('所有文献的跨学科性计算完毕，开始保存。')
+print('（极端年份如1800年可能缺少）所有文献的跨学科性计算完毕，开始保存。')
 print('len(paper2idDegree)',len(paper2idDegree))
 pk.dump(paper2idDegree, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/paper2idDegree.pk', 'wb'))
 print('保存完毕')
