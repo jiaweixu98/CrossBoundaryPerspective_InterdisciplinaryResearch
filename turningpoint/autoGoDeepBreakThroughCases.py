@@ -503,6 +503,13 @@ if __name__ == '__main__':
         # 生涯开始年份
         KeyStartYearSum = Counter()
 
+        # 时间变化
+        keyYearlyStartCounter = Counter() # 某年，多少人开始职业生涯
+        keyYearlyCrossCounter = Counter() # 在某年开始职业生涯的人，有多少跨过界
+        # 管理学
+        keyYearlyStartCounterManagement = Counter()
+        keyYearlyCrossCounterManagement = Counter()
+
 
 
 
@@ -530,28 +537,37 @@ if __name__ == '__main__':
                     DateSpan = SpanYearpublist(publist, 'both')
                     if ((START_YAER-1) < Startyear < (END_YAER+1)) and ( (cutyearCount-1) < TrueSpan ):
                         temp = BreakthroughMostFreqCombinationsForCAS(publist,cutYear=NO_CUT_YEAR, initialSpan=INITIAL_SPAN,TypeStr='both')
-                        if temp[0] == 0: # 一直没有转向
+                        keyYearlyStartCounter[Startyear] += 1
+                        # 一直没有转向
+                        if temp[0] == 0:
+                                if '管理学' in temp[1]:
+                                    keyYearlyStartCounterManagement[Startyear] += 1
                             # 看 initialset
                             # KeyInitialSetCounterM[' $$ '.join(sorted(temp[1]))] += 1
                             # KeyNoBreakthroughCounterM[' $$ '.join(sorted(temp[1]))] += 1
-                            for fieldItem in temp[1]:
+                            # for fieldItem in temp[1]:
                                 # 开始年份和
-                                KeyStartYearSum[fieldItem] += Startyear
-                                keyTrueSpanAllSum[fieldItem] += TrueSpan
-                                keyDateSpanAllSum[fieldItem] += DateSpan
+                                # KeyStartYearSum[fieldItem] += Startyear
+                                # keyTrueSpanAllSum[fieldItem] += TrueSpan
+                                # keyDateSpanAllSum[fieldItem] += DateSpan
                                 # KeyInitialSetCounter[fieldItem] += 1
                                 # KeyNoBreakthroughCounter[fieldItem] += 1
+                                continue
                         else: # 发生过转向
                             # KeyInitialSetCounterM[' $$ '.join(sorted(temp[1]))] += 1
                             # KeyBreakthroughCombineCounterM21[' $$ '.join(sorted(temp[1]))+'-->>>>--'+temp[2]] += 1
-                            for fieldItem in temp[1]:
-                                KeyStartYearSum[fieldItem] += Startyear
-                                keyTrueSpanAllSum[fieldItem] += TrueSpan
-                                keyDateSpanAllSum[fieldItem] += DateSpan
+                            if '管理学' in temp[1]:
+                                keyYearlyStartCounterManagement[Startyear] += 1
+                                keyYearlyCrossCounterManagement[Startyear] += 1
+                            keyYearlyCrossCounter[Startyear] += 1
+                            # for fieldItem in temp[1]:
+                            #     KeyStartYearSum[fieldItem] += Startyear
+                            #     keyTrueSpanAllSum[fieldItem] += TrueSpan
+                            #     keyDateSpanAllSum[fieldItem] += DateSpan
                                 # KeyInitialSetCounter[fieldItem] += 1
-                                keyBreakthroughPointYearAllSum[fieldItem] += temp[0]
+                                # keyBreakthroughPointYearAllSum[fieldItem] += temp[0]
                                 # 真实年份
-                                keyBreakthroughDateYearAllSum[fieldItem] += (int(temp[3]) - Startyear)
+                                # keyBreakthroughDateYearAllSum[fieldItem] += (int(temp[3]) - Startyear)
                                 
                                 # KeyBreakthroughCombineCounter[fieldItem+'-->>>>--'+temp[2]] += 1
 
@@ -715,12 +731,21 @@ if __name__ == '__main__':
         # except:
         #     pass
         #     print('======\n\n\n\n')
-
-        pk.dump(keyTrueSpanAllSum, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/keyTrueSpanAllSum%d_%d_True%dCut全生涯Span%d.pk'%(START_YAER,END_YAER,cutyearCount,INITIAL_SPAN), 'wb'))
-        pk.dump(keyDateSpanAllSum, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/keyDateSpanAllSum%d_%d_True%dCut全生涯Span%d.pk'%(START_YAER,END_YAER,cutyearCount,INITIAL_SPAN), 'wb'))
-        pk.dump(keyBreakthroughDateYearAllSum, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/keyBreakthroughDateYearAllSum%d_%d_True%dCut全生涯Span%d.pk'%(START_YAER,END_YAER,cutyearCount,INITIAL_SPAN), 'wb'))
-        pk.dump(keyBreakthroughPointYearAllSum, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/keyBreakthroughPointYearAllSum%d_%d_True%dCut全生涯Span%d.pk'%(START_YAER,END_YAER,cutyearCount,INITIAL_SPAN), 'wb'))
-        pk.dump(KeyStartYearSum, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/KeyStartYearSum%d_%d_True%dCut全生涯Span%d.pk'%(START_YAER,END_YAER,cutyearCount,INITIAL_SPAN), 'wb'))
+# 时间变化
+        keyYearlyStartCounter = Counter() # 某年，多少人开始职业生涯
+        keyYearlyCrossCounter = Counter() # 在某年开始职业生涯的人，有多少跨过界
+        # 管理学
+        keyYearlyStartCounterManagement = Counter()
+        keyYearlyCrossCounterManagement = Counter()
+        pk.dump(keyYearlyStartCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/keyYearlyStartCounter%d_%d_True%dCut全生涯Span%d.pk'%(START_YAER,END_YAER,cutyearCount,INITIAL_SPAN), 'wb'))
+        pk.dump(keyYearlyCrossCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/keyYearlyCrossCounter%d_%d_True%dCut全生涯Span%d.pk'%(START_YAER,END_YAER,cutyearCount,INITIAL_SPAN), 'wb'))
+        pk.dump(keyYearlyStartCounterManagement, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/keyYearlyStartCounterManagement%d_%d_True%dCut全生涯Span%d.pk'%(START_YAER,END_YAER,cutyearCount,INITIAL_SPAN), 'wb'))
+        pk.dump(keyYearlyCrossCounterManagement, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/keyYearlyCrossCounterManagement%d_%d_True%dCut全生涯Span%d.pk'%(START_YAER,END_YAER,cutyearCount,INITIAL_SPAN), 'wb'))
+        # pk.dump(keyTrueSpanAllSum, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/keyTrueSpanAllSum%d_%d_True%dCut全生涯Span%d.pk'%(START_YAER,END_YAER,cutyearCount,INITIAL_SPAN), 'wb'))
+        # pk.dump(keyDateSpanAllSum, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/keyDateSpanAllSum%d_%d_True%dCut全生涯Span%d.pk'%(START_YAER,END_YAER,cutyearCount,INITIAL_SPAN), 'wb'))
+        # pk.dump(keyBreakthroughDateYearAllSum, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/keyBreakthroughDateYearAllSum%d_%d_True%dCut全生涯Span%d.pk'%(START_YAER,END_YAER,cutyearCount,INITIAL_SPAN), 'wb'))
+        # pk.dump(keyBreakthroughPointYearAllSum, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/keyBreakthroughPointYearAllSum%d_%d_True%dCut全生涯Span%d.pk'%(START_YAER,END_YAER,cutyearCount,INITIAL_SPAN), 'wb'))
+        # pk.dump(KeyStartYearSum, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/KeyStartYearSum%d_%d_True%dCut全生涯Span%d.pk'%(START_YAER,END_YAER,cutyearCount,INITIAL_SPAN), 'wb'))
         # pk.dump(KeyInitialSetCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/KeyInitialSetCounter%d_%d_True%dCut全生涯Span%d.pk'%(START_YAER,END_YAER,cutyearCount,INITIAL_SPAN), 'wb'))
         # pk.dump(KeyNoBreakthroughCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/KeyNoBreakthroughCounter%d_%d_True%dCut全生涯Span%d.pk'%(START_YAER,END_YAER,cutyearCount,INITIAL_SPAN), 'wb'))
         # pk.dump(KeyBreakthroughCombineCounter, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/KeyBreakthroughCombineCounter%d_%d_True%dCut全生涯Span%d.pk'%(START_YAER,END_YAER,cutyearCount,INITIAL_SPAN), 'wb'))
