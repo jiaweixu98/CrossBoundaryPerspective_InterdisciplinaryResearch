@@ -9,10 +9,11 @@ with open(mag_dir+'Papers.txt', encoding="ISO-8859-1") as FileObj:
     for lines in tqdm(FileObj):
         temp = lines.split('\t')
         try:
+            if len(temp[9])!=4 or int(temp[9])< 1801 or int(temp[9])>2021:
+                continue
             paperYear[temp[0]] = int(temp[9])
         except:
             continue
 
 print(len(paperYear))
-# 56190774
 pk.dump(paperYear, open('../../DataCrossBoundaryPerspective_InterdisciplinaryResearch/paperYear.pk', 'wb'))
