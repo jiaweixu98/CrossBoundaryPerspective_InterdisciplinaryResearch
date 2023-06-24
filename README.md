@@ -9,3 +9,5 @@ journalDescriptor.ipynb
 
 readMagPapers
 读取papers, 找到所有出现在JCR期刊中的期刊。
+
+详情参见“终稿.pdf”
