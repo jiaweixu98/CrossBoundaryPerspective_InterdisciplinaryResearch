@@ -1,13 +1,11 @@
-# CrossBoundaryPerspective_InterdisciplinaryResearch
+# 从跨领域认可视角看跨学科研究（CrossBoundaryPerspective_InterdisciplinaryResearch）
 
-情报学硕士毕业论文。通过跨界行为,研究跨学科研究的模式.
+我的情报学硕士毕业论文。通过跨领域认可研究跨学科研究的模式。详情参见“终稿.pdf”。
 **数据**
 包括：MAG（2022），JCR（2021）和中科院JCR分类（2022）。
 
-journalDescriptor.ipynb
-了解所有学科中，期刊学科分类的宏观情况。（JCR期刊）
-
-readMagPapers
-读取papers, 找到所有出现在JCR期刊中的期刊。
-
-详情参见“终稿.pdf”
+**代码**
+1. 数据准备
+2. 跨领域行为探索
+3. 跨领域行为与跨学科
+4. 双重差分（did）
